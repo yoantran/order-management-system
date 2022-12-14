@@ -1,0 +1,9 @@
+# a customer record has the following format
+#ID,Name,Address,Phone,customer type, username, password
+#you can remove or ignore these comments (start with #) when you run your program
+C001,Minh Hoang,18 Irwin Street,0421473243,Silver,minhhoang,123456
+C002,Hong Wang,20 Irwin Street,0424173255,Gold,wanghong98,987654
+C003,Linh Nguyen,12 Brunswick Street,0424173255,Silver,linhtb,linhlinh
+C004,Antony Zinc,114 Fraser Avenue,0424512345,Gold,abookworm,booklover
+C005,John Cain,45 Sydney Road,0424325123,Platinum,johnthebaby,123456
+C006,Dylan Case,02 West Drive,0424125598,Regular,dylanc,2222222
