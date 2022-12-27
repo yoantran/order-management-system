@@ -2,6 +2,22 @@ import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
 public class Main {
+    public static void signIn(AccountManager manager) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter your username and password:");
+        String username = scanner.next();
+        String password = scanner.next();
+        Account account = manager.login(username, password);
+        if (account == null) {
+            System.out.println("Invalid username or password.");
+        }
+        else {
+            System.out.println("Welcome, " + account.getUsername() + "!");
+        }
+    }
+
+
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -18,18 +34,26 @@ public class Main {
                 System.out.println("Enter a username and password:");
                 String username = scanner.next();
                 String password = scanner.next();
-                Account account = new Customer(nextId, username, password);
+                System.out.println("Please enter your full name");
+                String fullName = scanner.next();
+
+                System.out.println("Please enter your phone number");
+                String phoneNumber = scanner.next();
+
+                System.out.println("Please enter your email");
+                String email = scanner.next();
+
+                System.out.println("Please enter your address");
+                String address = scanner.next();
+
+                Account account = new Customer(nextId, username, password, fullName, phoneNumber, email, address);
                 manager.addUser(account);
                 nextId++;
             }
             else if (option == 2) {
-                System.out.println("Enter your username and password:");
-                String username = scanner.next();
-                String password = scanner.next();
-                Account account = manager.login(username, password);
-                if (account == null) {
-                    System.out.println("Invalid username or password.");
-                }
-                else {
-                    System.out.println("Welcome, " + account.getUsername() + "!");
-    }}}}}
+                signIn(manager);
+            }
+        }
+    }
+}
+
