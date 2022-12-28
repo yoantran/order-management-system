@@ -34,11 +34,11 @@ resolve an existing problem in society.
 
 Thus, the nature of this assignment 3 is to provide you a taste and experience of a 4-week tech hackathon.
 
-Assume that you are involved in a technology store that wishes to develop an Order Management System, which is the key
+Assume that you are involved in a technology store that wishes to develop an order.Order Management System, which is the key
 point of their business growth plan. This may reduce the paper and printing and distribution work which saves a lot of
 time.
 
-The main objective of the Store Order Management System is to allow customers order products.
+The main objective of the Store order.Order Management System is to allow customers order products.
 
 The detailed requirements and technical specifications for this application can be found: [here](COSC2081_Group_Project.pdf)
 
