@@ -1,9 +1,9 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class accounts {
     //attributes
@@ -100,7 +100,7 @@ public class accounts {
         this.accountType = accountType;
     }
     //methods
-    public int readCustomerList() throws FileNotFoundException {
+    public static int readCustomerList() throws FileNotFoundException {
         Scanner fileScanner = new Scanner(new File("src/account.txt"));
         int count = 0;
         while (fileScanner.hasNext()){
@@ -109,36 +109,51 @@ public class accounts {
         fileScanner.close();
         return count;
     }
-    public String generateID() throws FileNotFoundException {
+    public static String generateID() throws FileNotFoundException {
         int customerAmount = readCustomerList();
         if(customerAmount == 0){
-            return "C" + 001;
+            return "C00" + 1;
         }
         else{
-            customerAmount++;
-            return "C" + customerAmount;
+            customerAmount = customerAmount + 1;
+            return "C00" + customerAmount;
         }
     }
-    public accounts registerCustomerAccount() throws NoSuchAlgorithmException, FileNotFoundException {
-        String ID = generateID();
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Please write your username");
-        String username = sc.nextLine();
-        System.out.println("Please write the password");
-        String password = sc.nextLine();
-        String salt = getSalt();
-        String securePassword = get_SHA_256_SecurePassword(password,salt);
-        System.out.println("Enter your full name");
-        String fullName = sc.nextLine();
-        System.out.println("Enter your phone number");
-        int phoneNumber = Integer.parseInt(sc.nextLine());
-        System.out.println("Enter your email");
-        String email = sc.nextLine();
-        System.out.println("Enter your address");
-        String address = sc.nextLine();
-         String accountType = "Customer";
-        return new accounts(ID,username,securePassword,fullName,phoneNumber,email,address,accountType);
+    public static void registerCustomerAccount() throws NoSuchAlgorithmException, IOException {
+        try(FileWriter fw = new FileWriter("src/account.txt", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw))
+        {
+            String ID = generateID();
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Please write your username");
+            String username = sc.nextLine();
+            System.out.println("Please write the password");
+            String password = sc.nextLine();
+            String salt = getSalt();
+            String securePassword = get_SHA_256_SecurePassword(password,salt);
+            System.out.println("Enter your full name");
+            String fullName = sc.nextLine();
+            System.out.println("Enter your phone number");
+            int phoneNumber = Integer.parseInt(sc.nextLine());
+            System.out.println("Enter your email");
+            String email = sc.nextLine();
+            System.out.println("Enter your address");
+            String address = sc.nextLine();
+            String accountType = "Customer";
+            System.out.println("Do you want to save?");
+            String answer = sc.nextLine();
+            if(answer.equals("Yes")) {
+                out.println(ID + " , " + username + " , " + securePassword + " , " + fullName + " , " + phoneNumber + " , " + email + " , " + address + " , " + accountType);
+            }
+
+            out.close();
+        } catch (IOException e) {
+            //exception handling left as an exercise for the reader
+        }
+
     }
+
     private static String get_SHA_256_SecurePassword(String passwordToHash,
                                                      String salt) {
         String generatedPassword = null;
