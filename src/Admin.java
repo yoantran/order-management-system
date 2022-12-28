@@ -1,5 +1,7 @@
+import java.security.NoSuchAlgorithmException;
+
 class Admin extends Account {
-    public Admin(int id, String username, String password) {
+    public Admin(String id, String username, String password) throws NoSuchAlgorithmException {
         super(id, username, password);
     }
 

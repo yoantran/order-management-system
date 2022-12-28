@@ -1,9 +1,12 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
 class AccountManager {
 
-    private List<Account> accounts;
+    private List<Customer> accounts;
     private int nextId;
 
     public AccountManager() {
@@ -11,11 +14,6 @@ class AccountManager {
         nextId = 1;
     }
 
-    public void addUser(Account account) {
-        account.setId(nextId);
-        nextId++;
-        accounts.add(account);
-    }
 
     public Account login(String username, String password) {
         for (Account account : accounts) {
@@ -26,7 +24,11 @@ class AccountManager {
         return null;
     }
 
+
+
+
     public int getNextId() {
         return nextId;
     }
+
 }
