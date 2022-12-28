@@ -11,6 +11,7 @@ public class Hashing {
         String securePassword = get_SHA_256_SecurePassword(passwordToHash, salt);
         System.out.println(securePassword);
         String checkHash = get_SHA_256_SecurePassword(passwordToHash,salt);
+        System.out.println(checkHash);
         System.out.println((checkHash.equals(securePassword)));
 
     }
