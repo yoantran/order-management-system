@@ -9,6 +9,10 @@ class Customer extends Account {
     private String address;
     private String email;
 
+    private String membership;
+
+
+
 
     public Customer(String id, String username, String password, String fullName, String phoneNumber, String email, String address) throws FileNotFoundException, NoSuchAlgorithmException {
         super(id, username, password);
@@ -133,5 +137,21 @@ class Customer extends Account {
             }
         } while (true);
         this.email = email;
+    }
+
+    public String getMembership() {
+        return membership;
+    }
+
+    public void setMembershipSilver() {
+        this.membership = "Silver";
+    }
+
+    public void setMembershipGold() {
+        this.membership = "Gold";
+    }
+
+    public void setMembershipPlatinum() {
+        this.membership = "Platinum";
     }
 }

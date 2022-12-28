@@ -1,19 +1,26 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.security.NoSuchAlgorithmException;
+import java.util.Scanner;
 
 abstract class Account {
     private String id;
     private final String username;
     private String password;
 
-    public Account(String id, String username, String password) throws NoSuchAlgorithmException {
+    public Account(String id, String usernameReg, String password) throws NoSuchAlgorithmException {
         this.id = id;
-        this.username = username;
-//        String hashedPassword = get_SHA_256_SecurePassword(password, getSalt());
-        this.password = password;
+        Scanner sc = new Scanner(System.in);
+
+        do {
+            if (Method.ifExisted("./Data/account.txt", usernameReg)) {
+                usernameReg = sc.nextLine();
+            } else {
+                break;
+            }
+        } while (true);
+        this.username = usernameReg;
+
+
     }
 
     public Account(String username) {

@@ -10,8 +10,7 @@ public class Main {
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
 
         Scanner scanner = new Scanner(System.in);
-        AccountManager manager = new AccountManager();
-        Admin admin = new Admin("a00","admin", "admin");
+        Admin admin = new Admin("A00","admin", "admin");
         boolean isLogged = false;
         boolean isLoggedAdmin = false;
 
