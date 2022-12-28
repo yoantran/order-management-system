@@ -4,6 +4,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
+
+
 public class Main {
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
 
@@ -28,19 +30,7 @@ public class Main {
                 System.out.println("Enter your username and password:");
                 String username = scanner.next();
                 String password = scanner.next();
-                Account account = manager.login(username, password);
-                if (account == null) {
-                    System.out.println("Invalid username or password.");
-                }
-                else {
-                    System.out.println("Welcome, " + account.getUsername() + "!");
-                    isLogged = true;
-                    if (account.isAdmin()) {
-                        System.out.println("You are an admin!");
-                        isLoggedAdmin = true;
-                    }
-                    break;
-                };
+                Account.login("src/Data/account.txt", username, password);
             }
         }
     }

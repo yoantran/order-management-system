@@ -47,17 +47,18 @@ abstract class Account {
         return password;
     }
 
-   public static String login(File file, String username, String password) {
+   public static String login(String file, String username, String password) {
         String id = null;
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
             while((line = br.readLine()) != null) {
                 String[] data = line.split(","); // split line by comma delimiter
-                if (username == data[0] && !(password == data[1])) {
+                System.out.println(data[0]);
+                if (username.equals(data[0]) && !(password.equals(data[1]))) {
 
                     System.out.println("Wrong username or password");
-                } else if (username == data[0] && (password == data[1])) {
+                } else if (username.equals(data[0]) && (password.equals(data[1]))) {
                     id = data[3];
                     System.out.printf("Welcome %s!\n", data[0]);
                 } else {

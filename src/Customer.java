@@ -91,7 +91,7 @@ class Customer extends Account {
     public void setPhoneNumber(String phoneNumber) {
         Scanner sc = new Scanner(System.in);
         do {
-            if (phoneNumber == null || phoneNumber.trim().isEmpty() || !phoneNumber.matches("/^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/")) {
+            if (phoneNumber == null || phoneNumber.trim().isEmpty() || !phoneNumber.matches("^(0|\\+84)(\\s|\\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\\d)(\\s|\\.)?(\\d{3})(\\s|\\.)?(\\d{3})$")) {
                 System.out.println("Your phone number is invalid, please re-input your phone number");
                 phoneNumber = sc.nextLine();
             } else {
