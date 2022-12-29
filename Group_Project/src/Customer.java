@@ -19,4 +19,34 @@ public class Customer extends accounts{
     }
     //Getters and Setters
 
+    public String getMembershipStatus() {
+        return membershipStatus;
+    }
+
+    public void setMembershipStatus(String membershipStatus) {
+        this.membershipStatus = membershipStatus;
+    }
+
+    public int getTotalSpending() {
+        return totalSpending;
+    }
+
+    public void setTotalSpending(int totalSpending) {
+        this.totalSpending = totalSpending;
+    }
+    //methods
+    @Override
+    public String viewAccount() {
+        return "accounts{" +
+                "ID='" + super.getID() + '\'' +
+                ", username='" + super.getUsername() + '\'' +
+                ", password='" + super.getPassword() + '\'' +
+                ", fullName='" + super.getFullName() + '\'' +
+                ", phoneNumber=" + super.getPhoneNumber() +
+                ", email='" + super.getEmail() + '\'' +
+                ", address='" + super.getAddress() + '\'' +
+                ", Membership Status='" + this.getMembershipStatus() + '\'' +
+                ", Total Spending= '" + this.getTotalSpending() + '\'' +
+                '}';
+    }
 }

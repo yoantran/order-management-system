@@ -181,8 +181,9 @@ public class accounts {
         }
 
     }
-        public static Boolean verifyLogin() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-            String ID, systemUsername, systemPassword;
+        public Boolean verifyLogin() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+            String ID, systemUsername, systemPassword,systemFullName , systemEmail, systemAddress, systemAccountType;
+            int systemPhoneNumber;
             Scanner sc = new Scanner(System.in);
             System.out.println("Type in your username");
             String username = sc.nextLine();
@@ -210,10 +211,20 @@ public class accounts {
                     ID = inReader.nextToken();
                     systemUsername = inReader.nextToken();
                     systemPassword = inReader.nextToken();
+                    systemFullName = inReader.nextToken();
+                    systemPhoneNumber = Integer.parseInt(inReader.nextToken());
+                    systemEmail = inReader.nextToken();
+                    systemAddress = inReader.nextToken();
                     System.out.println(systemPassword);
                     System.out.println(password);
                     if (validatePassword(password, systemPassword)) {
-                        System.out.printf(systemUsername);
+                        this.ID = ID;
+                        this.username = systemUsername;
+                        this.password = systemPassword;
+                        this.fullName = systemFullName;
+                        this.phoneNumber = systemPhoneNumber;
+                        this.email = systemEmail;
+                        this.address = systemAddress;
                         login = true;
                     }
 
@@ -274,6 +285,8 @@ public class accounts {
         return salt;
     }
 
+
+
     private static String toHex(byte[] array) throws NoSuchAlgorithmException
     {
         BigInteger bi = new BigInteger(1, array);
@@ -287,4 +300,18 @@ public class accounts {
             return hex;
         }
 
-}}
+}
+
+    public String viewAccount() {
+        return "accounts{" +
+                "ID='" + ID + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", phoneNumber=" + phoneNumber +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", accountType='" + accountType + '\'' +
+                '}';
+    }
+}
