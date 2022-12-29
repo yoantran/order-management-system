@@ -33,6 +33,21 @@ public class Method {
         }
     }
 
+    public static void writeProductToDatabase(Product product, String filename) {
+        try {
+            FileWriter fw = new FileWriter(filename, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.append(product.getId() + "," + product.getProductName() + "," + product.getPrice() + "," + product.getCategory());
+
+            bw.close(); // close the BufferedWriter object
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error writing to database file: " + e.getMessage());
+        }
+    }
+
+
+
 
     public static boolean ifUsernameExisted(String fileName, String username) {
         try {
@@ -157,9 +172,33 @@ public class Method {
         return price;
     }
 
-//    public static String validateCategory() {
-//
-//    }
+    public static String validateCategory(String category) throws IOException {
+        Scanner scanner = new Scanner(System.in);
+
+        if (!Method.ifCategoryExisted(category)) {
+            System.out.println("The category you input does not exist in the system. Would you like to add new category (1) or re-input the category (2)? 1/2");
+            int productCase = scanner.nextInt();
+            scanner.nextLine();
+            do {
+                if (productCase != 1 && productCase != 2) {
+                    System.out.println("Please input 1 or 2 only! (1) to add new category and (2) to re-input the category!");
+                    productCase = scanner.nextInt();
+                    scanner.nextLine();
+                } else
+                    break;
+            } while (true);
+            if (productCase == 1) {
+                Category categoryAdd = new Category(category);
+                System.out.println("New category added!");
+            } else {
+                System.out.println("Please input the category");
+                category = scanner.nextLine();
+                category = validateCategory(category);
+            }
+            return category;
+        }
+        return category;
+    }
 
 
 

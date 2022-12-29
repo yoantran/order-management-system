@@ -4,17 +4,17 @@ import java.util.Scanner;
 public class Product {
     private String id;
     private final String productName;
-    int price;
-    private Category category;
+    private int price;
+    private String category;
 
-    public Product(String productName, int price, Category category) throws IOException {
+    public Product(String productName, int price, String category) throws IOException {
         this.id = Method.generateID("P", "E:\\Study\\order-management-system\\Data\\products.txt");
         this.productName = productName;
         setPrice(price);
         this.category = category;
     }
 
-    public static void addProduct(String fileName) {
+    public static void addProduct(String fileName) throws IOException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please input the product's name");
         String productName = scanner.nextLine();
@@ -27,11 +27,10 @@ public class Product {
 
         System.out.println("Please input the category of the product");
         String category = scanner.nextLine();
-        do {
-            if (Method.ifCategoryExisted(category)) {
-                System.out.println("The category has already existed, please re-input the category name");
-            }
-        } while (true);
+        category = Method.validateCategory(category);
+        Product product = new Product(productName, price, category);
+        Method.writeProductToDatabase(product, "E:\\Study\\order-management-system\\Data\\products.txt");
+        System.out.println("Product added successfully!");
 
     }
 
@@ -44,9 +43,23 @@ public class Product {
         this.price = price;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 
+    public String getId() {
+        return id;
+    }
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public String getCategory() {
+        return category;
+    }
 }
