@@ -98,6 +98,40 @@ public class Product {
         return products;
     }
 
+    public static List<Product> listProductsByCategory(String category, String order, String fileName) throws IOException {
+        // Read the product data from the text file
+        List<String> lines = Files.readAllLines(Paths.get(fileName));
+
+        // Parse the lines into a list of Product objects
+        List<Product> products = new ArrayList<>();
+        for (String line : lines) {
+            String[] fields = line.split(",");
+            if (fields[3].equals(category)) {
+                products.add(new Product(fields[0], fields[1], parseInt(fields[2]), fields[3]));
+            }
+        }
+
+        // Sort the list of products by price
+        products.sort((p1, p2) -> {
+            if (order.equals("asc")) {
+                return p1.getPrice() - p2.getPrice();
+            } else {
+                return p2.getPrice() - p1.getPrice();
+            }
+        });
+
+        return products;
+
+//        List<Product> products = Product.listProductsByCategory("Category", "asc", "E:\\Study\\order-management-system\\Data\\products.txt");
+
+//        for (Product product : products) {
+//    System.out.println("ID: " + product.getId());
+//    System.out.println("Product name: " + product.getProductName());
+//    System.out.println("Price: " + product.getPrice());
+//    System.out.println("Category: " + product.getCategory());
+//}
+    }
+
 
 
 

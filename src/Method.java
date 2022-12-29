@@ -1,5 +1,6 @@
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
@@ -281,6 +282,24 @@ public class Method {
 
         // Close the writer
         writer.close();
+    }
+
+    public static void replaceCategory(String oldCategory, String newCategory) throws IOException {
+        // Read the product data from the text file
+        Path path = Paths.get("E:\\Study\\order-management-system\\Data\\products.txt");
+        List<String> lines = Files.readAllLines(path);
+
+        // Replace the category name in each line
+        for (int i = 0; i < lines.size(); i++) {
+            String[] fields = lines.get(i).split(",");
+            if (fields[3].equals(oldCategory)) {
+                fields[3] = newCategory;
+                lines.set(i, fields[0] + "," + fields[1] + "," + fields[2] + "," + fields[3]);
+            }
+        }
+
+        // Write the modified lines back to the text file
+        Files.write(path, lines);
     }
 
 

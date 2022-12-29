@@ -57,6 +57,7 @@ public class Category {
 
     public static void removeCategoryByName (String name) throws IOException {
         Method.removeByName(name, "E:\\Study\\order-management-system\\Data\\category.txt");
+        Method.replaceCategory(name, "None");
     }
 
     public static List<Category> listCategories() throws IOException {
