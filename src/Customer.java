@@ -1,7 +1,13 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+
+import static java.lang.Integer.parseInt;
 
 class Customer extends Account {
     private String fullName;
@@ -21,12 +27,18 @@ class Customer extends Account {
         setPhoneNumber(phoneNumber);
         setAddress(address);
         setEmail(email);
+        setMembershipRegular();
 
     }
 
-
-
-
+    public Customer(String id, String usernameReg, String password, String fullName, String phoneNumber, String address, String email, String membership) throws NoSuchAlgorithmException {
+        super(id, usernameReg, password);
+        this.fullName = fullName;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.email = email;
+        this.membership = membership;
+    }
 
     public static void registerAccount(String filename) throws IOException, NoSuchAlgorithmException {
         Scanner scanner = new Scanner(System.in);
@@ -104,6 +116,10 @@ class Customer extends Account {
         return membership;
     }
 
+    public void setMembershipRegular() {
+        this.membership = "Regular";
+    }
+
     public void setMembershipSilver() {
         this.membership = "Silver";
     }
@@ -115,4 +131,46 @@ class Customer extends Account {
     public void setMembershipPlatinum() {
         this.membership = "Platinum";
     }
+
+    public static List<Customer> listCustomers() throws IOException, NoSuchAlgorithmException {
+        // Read the category data from the text file
+        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\category.txt"));
+
+        // Parse the lines into a list of Category objects
+        List<Customer> customers = new ArrayList<>();
+        for (String line : lines) {
+            String[] fields = line.split(",");
+            customers.add(new Customer(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6], fields[7]));
+        }
+
+        return customers;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

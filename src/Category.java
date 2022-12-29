@@ -1,8 +1,12 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class Category {
@@ -13,6 +17,12 @@ public class Category {
         setCategoryName(categoryName);
         this.id = Method.generateID("G", "E:\\Study\\order-management-system\\Data\\category.txt");
     }
+
+    public Category(String id, String categoryName) {
+        this.id = id;
+        this.categoryName = categoryName;
+    }
+
 
     public static void addCategory (String fileName) throws IOException {
         Scanner scanner = new Scanner(System.in);
@@ -47,6 +57,20 @@ public class Category {
 
     public static void removeCategoryByName (String name) throws IOException {
         Method.removeByName(name, "E:\\Study\\order-management-system\\Data\\category.txt");
+    }
+
+    public static List<Category> listCategories() throws IOException {
+        // Read the category data from the text file
+        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\category.txt"));
+
+        // Parse the lines into a list of Category objects
+        List<Category> categories = new ArrayList<>();
+        for (String line : lines) {
+            String[] fields = line.split(",");
+            categories.add(new Category(fields[0], fields[1]));
+        }
+
+        return categories;
     }
 
 

@@ -14,7 +14,8 @@ public class Method {
             FileWriter fw = new FileWriter(filename, true);
             BufferedWriter bw = new BufferedWriter(fw);
             bw.append(account.getId() + "," + account.getUsername() + "," + account.getPassword()
-                    + "," + account.getFullName() + "," + account.getPhoneNumber() + "," + account.getEmail() + "," + account.getAddress() + "\n");
+                    + "," + account.getFullName() + "," + account.getPhoneNumber() + "," + account.getEmail()
+                    + "," + account.getAddress() + "," + account.getMembership() + "\n");
 
             bw.close(); // close the BufferedWriter object
             fw.close();

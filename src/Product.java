@@ -1,5 +1,11 @@
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+
+import static java.lang.Integer.parseInt;
 
 public class Product {
     private String id;
@@ -11,6 +17,13 @@ public class Product {
         this.id = Method.generateID("P", "E:\\Study\\order-management-system\\Data\\products.txt");
         this.productName = productName;
         setPrice(price);
+        this.category = category;
+    }
+
+    public Product(String id, String productName, int price, String category) {
+        this.id = id;
+        this.productName = productName;
+        this.price = price;
         this.category = category;
     }
 
@@ -69,6 +82,20 @@ public class Product {
 
     public static void removeProductByName (String name) throws IOException {
         Method.removeByName(name, "E:\\Study\\order-management-system\\Data\\products.txt");
+    }
+
+    public static List<Product> listProducts() throws IOException {
+        // Read the category data from the text file
+        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\category.txt"));
+
+        // Parse the lines into a list of Category objects
+        List<Product> products = new ArrayList<>();
+        for (String line : lines) {
+            String[] fields = line.split(",");
+            products.add(new Product(fields[0], fields[1], parseInt(fields[2]), fields[3]));
+        }
+
+        return products;
     }
 
 
