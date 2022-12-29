@@ -1,9 +1,6 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
-import java.util.List;
-import java.util.ArrayList;
 
 
 public class Main {
@@ -11,6 +8,7 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         Admin admin = new Admin("A00","admin", "admin");
+        String fileName = "E:\\Study\\order-management-system\\Data\\account.txt";
         boolean isLogged = false;
         boolean isLoggedAdmin = false;
 
@@ -23,13 +21,13 @@ public class Main {
                 break;
             }
             else if (option == 1) {
-                Customer.registerAccount("src/Data/account.txt");
+                Customer.registerAccount(fileName);
             }
             else if (option == 2) {
                 System.out.println("Enter your username and password:");
                 String username = scanner.next();
                 String password = scanner.next();
-                Account.login("src/Data/account.txt", username, password);
+                Account.login(fileName, username, password);
             }
         }
     }

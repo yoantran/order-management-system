@@ -12,13 +12,14 @@ abstract class Account {
         Scanner sc = new Scanner(System.in);
 
         do {
-            if (Method.ifExisted("./Data/account.txt", usernameReg)) {
+            if (Method.ifExisted("E:\\Study\\order-management-system\\Data\\account.txt", usernameReg)) {
                 usernameReg = sc.nextLine();
             } else {
                 break;
             }
         } while (true);
         this.username = usernameReg;
+        this.password = password;
 
 
     }

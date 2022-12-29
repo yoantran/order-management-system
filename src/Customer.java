@@ -26,25 +26,7 @@ class Customer extends Account {
 
 
 
-    public static int readCustomerList() throws FileNotFoundException {
-        Scanner fileScanner = new Scanner(new File("src/Data/account.txt"));
-        int count = 0;
-        while (fileScanner.hasNext()){
-            count++;
-        }
-        fileScanner.close();
-        return count;
-    }
-    public static String generateID() throws FileNotFoundException {
-        int customerAmount = readCustomerList();
-        if(customerAmount == 0){
-            return "C" + Integer.toString(01);
-        }
-        else{
-            customerAmount++;
-            return "C" + Integer.toString(customerAmount);
-        }
-    }
+
 
     public static void registerAccount(String filename) throws IOException, NoSuchAlgorithmException {
         Scanner scanner = new Scanner(System.in);
@@ -62,7 +44,7 @@ class Customer extends Account {
 
         System.out.println("Please enter your address");
         String address = scanner.nextLine();
-        Customer account = new Customer(generateID(), username, password, fullName, phoneNumber, email, address);
+        Customer account = new Customer(Method.generateID("C"), username, password, fullName, phoneNumber, email, address);
         Method.writeToDatabase(account, filename);
     }
 
