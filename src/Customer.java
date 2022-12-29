@@ -33,19 +33,27 @@ class Customer extends Account {
         System.out.println("Enter a username and password:");
         String username = scanner.nextLine();
         String password = scanner.nextLine();
+
         System.out.println("Please enter your full name");
         String fullName = scanner.nextLine();
+        fullName = Method.validateEmpty(fullName);
 
         System.out.println("Please enter your phone number");
         String phoneNumber = scanner.nextLine();
+        phoneNumber = Method.validatePhone(phoneNumber);
 
         System.out.println("Please enter your email");
         String email = scanner.nextLine();
+        email = Method.validateEmail(email);
+
 
         System.out.println("Please enter your address");
         String address = scanner.nextLine();
-        Customer account = new Customer(Method.generateID("C"), username, password, fullName, phoneNumber, email, address);
+        address = Method.validateEmpty(address);
+
+        Customer account = new Customer(Method.generateID("C", filename), username, password, fullName, phoneNumber, email, address);
         Method.writeToDatabase(account, filename);
+        System.out.println("Register successfully!");
     }
 
     @Override
@@ -58,32 +66,18 @@ class Customer extends Account {
     }
 
     public void setFullName(String fullName) {
-        Scanner sc = new Scanner(System.in);
-        do {
-            if (fullName == null || fullName.trim().isEmpty()) {
-                System.out.println("Your full name is invalid, please re-input your full name");
-                fullName = sc.nextLine();
-            } else {
-                break;
-            }
-        } while (true);
+        fullName = Method.validateEmpty(fullName);
         this.fullName = fullName;
     }
+
+
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        Scanner sc = new Scanner(System.in);
-        do {
-            if (phoneNumber == null || phoneNumber.trim().isEmpty() || !phoneNumber.matches("^(0|\\+84)(\\s|\\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\\d)(\\s|\\.)?(\\d{3})(\\s|\\.)?(\\d{3})$")) {
-                System.out.println("Your phone number is invalid, please re-input your phone number");
-                phoneNumber = sc.nextLine();
-            } else {
-                break;
-            }
-        }while (true);
+        phoneNumber = Method.validatePhone(phoneNumber);
         this.phoneNumber = phoneNumber;
     }
 
@@ -93,14 +87,7 @@ class Customer extends Account {
 
     public void setAddress(String address) {
         Scanner sc = new Scanner(System.in);
-        do {
-            if (address == null || address.trim().isEmpty()) {
-                System.out.println("Your address is invalid, please re-input your address");
-                address = sc.nextLine();
-            } else {
-                break;
-            }
-        } while (true);
+        address = Method.validateEmpty(address);
         this.address = address;
     }
 
@@ -109,15 +96,7 @@ class Customer extends Account {
     }
 
     public void setEmail(String email) {
-        Scanner sc = new Scanner(System.in);
-        do {
-            if (email == null || email.trim().isEmpty() || !email.matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")) {
-                System.out.println("Your email is invalid, please re-input your email");
-                email = sc.nextLine();
-            } else {
-                break;
-            }
-        } while (true);
+        email = Method.validateEmail(email);
         this.email = email;
     }
 

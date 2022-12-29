@@ -7,8 +7,8 @@ public class Main {
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
 
         Scanner scanner = new Scanner(System.in);
-        Admin admin = new Admin("A00","admin", "admin");
-        String fileName = "E:\\Study\\order-management-system\\Data\\account.txt";
+        String fileAccount = "E:\\Study\\order-management-system\\Data\\account.txt";
+        Account currentAccount;
         boolean isLogged = false;
         boolean isLoggedAdmin = false;
 
@@ -21,14 +21,33 @@ public class Main {
                 break;
             }
             else if (option == 1) {
-                Customer.registerAccount(fileName);
+                Customer.registerAccount(fileAccount);
             }
             else if (option == 2) {
                 System.out.println("Enter your username and password:");
                 String username = scanner.next();
                 String password = scanner.next();
-                Account.login(fileName, username, password);
+                currentAccount = Account.login(fileAccount, username, password);
+                if (currentAccount != null) {
+                    if (currentAccount.isAdmin()) {
+                        System.out.printf("Admin logged in, welcome to Order Management System\n");
+                        isLoggedAdmin = true;
+                        break;
+                    } else {
+                        System.out.printf("Logged in, welcome %s to Order Management System\n", currentAccount.getUsername());
+                        isLogged = true;
+                        break;
+                    }
+                }
             }
+        }
+
+        while (isLogged) {
+
+        }
+
+        while (isLoggedAdmin) {
+
         }
     }
 }

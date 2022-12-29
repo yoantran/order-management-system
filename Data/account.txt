@@ -1,3 +1,0 @@
-minhnguyen,123,C1,minh nguyen,0387207548,minh@minh.com,HCM
-minhnguyenn,123,C2,minh,0387207548,minh@minh.com,HCM
-minh1,0387207548,C3,minhminh,0387207548,minh@gmail.com,HCM
