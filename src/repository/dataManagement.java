@@ -27,12 +27,12 @@ public class dataManagement {
         ArrayList<Order> orderList = new ArrayList();
 
         try {
-            BufferedReader orderReader = new BufferedReader(new FileReader("repository/Order.csv"));
+            BufferedReader readOrder = new BufferedReader(new FileReader("repository/Order.csv"));
 
             while(orderItem != null) {
-                if ((orderItem = orderReader.readLine()) != null) {
-                    String[] singleItem = orderItem.split(",");
-                    Order newOrder = new Order(singleItem[0], singleItem[1], singleItem[2], singleItem[3], singleItem[4], Double.parseDouble(singleItem[5]));
+                if ((orderItem = readOrder.readLine()) != null) {
+                    String[] item = orderItem.split(",");
+                    Order newOrder = new Order(item[0], item[1], item[2], item[3], item[4], Double.parseDouble(item[5]));
                     orderList.add(newOrder);
                 }
             }
@@ -47,15 +47,15 @@ public class dataManagement {
         ArrayList<Product> productList = new ArrayList();
 
         try {
-            BufferedReader productReader = new BufferedReader(new FileReader("repository/items.csv"));
+            BufferedReader readProduct = new BufferedReader(new FileReader("repository/items.csv"));
 
             while(productItem != null) {
-                if ((productItem = productReader.readLine()) != null) {
+                if ((productItem = readProduct.readLine()) != null) {
                     if (productItem.equals("")) {
                         productList.add(new Product());
                     } else {
-                        String[] singleItem = productItem.split(",");
-                        Product newProduct = new Product(singleItem[0], singleItem[1], singleItem[2], singleItem[3], Double.parseDouble(singleItem[4]));
+                        String[] item = productItem.split(",");
+                        Product newProduct = new Product(item[0], item[1], item[2], item[3], Double.parseDouble(item[4]));
                         productList.add(newProduct);
                     }
                 }
@@ -68,17 +68,17 @@ public class dataManagement {
     }
 
     public ArrayList<Member> readCustomerList() {
-        String userItem = "";
+        String memberItem = "";
         ArrayList<Member> memberList = new ArrayList();
 
         try {
-            BufferedReader userReader = new BufferedReader(new FileReader("repository/customers.csv"));
+            BufferedReader readMember = new BufferedReader(new FileReader("repository/customers.csv"));
 
-            while(userItem != null) {
-                if ((userItem = userReader.readLine()) != null) {
-                    String[] singleItem = userItem.split(",");
-                    Member newUser = new Member(singleItem[0], singleItem[1], singleItem[2], singleItem[3], singleItem[4], singleItem[5], Double.parseDouble(singleItem[6]));
-                    memberList.add(newUser);
+            while(memberItem != null) {
+                if ((memberItem = readMember.readLine()) != null) {
+                    String[] item = memberItem.split(",");
+                    Member newMember = new Member(item[0], item[1], item[2], item[3], item[4], item[5], Double.parseDouble(item[6]));
+                    memberList.add(newMember);
                 }
             }
         } catch (Exception var6) {
@@ -110,7 +110,7 @@ public class dataManagement {
 
     }
 //
-    public void writeMemberFile(ArrayList<Member> MemberList, boolean append) {
+    public void writeCustomerFile(ArrayList<Member> MemberList, boolean append) {
         try {
             BufferedWriter DataWriter = new BufferedWriter(new FileWriter("repository/members.csv", append));
             Iterator var4 = MemberList.iterator();
