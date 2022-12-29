@@ -2,7 +2,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.io.*;
 import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -104,16 +103,17 @@ public class accounts {
         this.accountType = accountType;
     }
     //methods
-    public static int readCustomerList() throws FileNotFoundException {
-        Scanner fileScanner = new Scanner(new File("src/account.txt"));
+    public static int readCustomerList() throws IOException {
+        BufferedReader fileScanner = new BufferedReader(new FileReader("C:\\Users\\Hy\\Downloads\\GitHub\\order-management-system\\Group_Project\\src\\account.txt"));
         int count = 0;
-        while (fileScanner.hasNext()){
+        while (fileScanner.readLine() != null){
             count++;
         }
+        System.out.println(count);
         fileScanner.close();
         return count;
     }
-    public static String generateID() throws FileNotFoundException {
+    public static String generateID() throws IOException {
         int customerAmount = readCustomerList();
         if(customerAmount == 0){
             return "C00" + 1;
@@ -123,15 +123,41 @@ public class accounts {
             return "C00" + customerAmount;
         }
     }
-    public static void registerCustomerAccount() throws NoSuchAlgorithmException, IOException {
-        try(FileWriter fw = new FileWriter("src/account.txt", true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter out = new PrintWriter(bw))
-        {
-            String ID = generateID();
-            Scanner sc = new Scanner(System.in);
-            System.out.println("Please write your username");
-            String username = sc.nextLine();
+    public static boolean checkUser(String username) throws IOException {
+        Scanner fileScanner = new Scanner(new File(("C:\\Users\\Hy\\Downloads\\GitHub\\order-management-system\\Group_Project\\src\\account.txt")));
+        String line;
+        while (fileScanner.hasNext()){
+            line = fileScanner.nextLine();
+            StringTokenizer inReader = new StringTokenizer(line," , ");
+            if (inReader.countTokens() != 8)
+                throw new IOException("Invalid Input Format");
+            else {
+
+                // Since there is always 3 tokens of a line so take turn to
+                // assign them into name, address and age
+                String ID = inReader.nextToken();
+                String user = inReader.nextToken();
+                if(username.equals(user)){
+                    System.out.println("Username is already taken");
+                    return false;
+                }
+                else {
+                    return true;
+                }
+
+            }
+        }
+        return false;
+    }
+
+    public static void registerCustomerAccount() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+        FileWriter fw = new FileWriter("src/account.txt", true);
+        BufferedWriter bw = new BufferedWriter(fw);
+        String ID = generateID();
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Please write your username");
+        String username = sc.nextLine();
+        if(checkUser(username)){
             System.out.println("Please write the password");
             String password = sc.nextLine();
             String securePassword = generateStorngPasswordHash(password);
@@ -144,59 +170,58 @@ public class accounts {
             System.out.println("Enter your address");
             String address = sc.nextLine();
             String accountType = "Customer";
-            System.out.println("Do you want to save?");
-            String answer = sc.nextLine();
-            if(answer.equals("Yes")) {
-                out.println(ID + " , " + username + " , " + securePassword + " , " + fullName + " , " + phoneNumber + " , " + email + " , " + address + " , " + accountType);
-            }
-
-        } catch (IOException e) {
-            //exception handling left as an exercise for the reader
-        } catch (InvalidKeySpecException e) {
-            throw new RuntimeException(e);
+            bw.write(ID + " , " + username + " , " + securePassword + " , " + fullName + " , " + phoneNumber + " , " + email + " , " + address + " , " +accountType);
+            bw.newLine();
+            System.out.println("Thank You");
+         sc.close();
+        bw.close();
+        }
+        else {
+            registerCustomerAccount();
         }
 
     }
-    public static Boolean verifyLogin() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-        String ID,systemUsername,systemPassword;
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Type in your username");
-        String username = sc.nextLine();
-        System.out.println("Type in your password");
-        String password = sc.nextLine();
-        Scanner fileScanner = new Scanner(new File("src/account.txt"));
-        String line;
-        Boolean login = false;
-        // Continue to loop while the fileScanner does not finish reading the whole file
-        while (fileScanner.hasNext()) {
+        public static Boolean verifyLogin() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+            String ID, systemUsername, systemPassword;
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Type in your username");
+            String username = sc.nextLine();
+            System.out.println("Type in your password");
+            String password = sc.nextLine();
+            Scanner fileScanner = new Scanner(new File("src/account.txt"));
+            String line;
+            Boolean login = false;
+            // Continue to loop while the fileScanner does not finish reading the whole file
+            while (fileScanner.hasNext()) {
 
-            // Read the whole line of the file
-            line = fileScanner.nextLine();
+                // Read the whole line of the file
+                line = fileScanner.nextLine();
 
-            // Use StringTokenizer object to parse a string line into tokens using deliminator ","
-            StringTokenizer inReader = new StringTokenizer(line," , ");
+                // Use StringTokenizer object to parse a string line into tokens using deliminator ","
+                StringTokenizer inReader = new StringTokenizer(line, " , ");
 
-            // Double check if there are exactly three tokens of every line
-            if (inReader.countTokens()<0)
-                throw new IOException("Invalid Input Format");
-            else {
+                // Double check if there are exactly three tokens of every line
+                if (inReader.countTokens() < 0)
+                    throw new IOException("Invalid Input Format");
+                else {
 
-                // Since there is always 3 tokens of a line so take turn to
-                // assign them into name, address and age
-                ID = inReader.nextToken();
-                systemUsername = inReader.nextToken();
-                systemPassword = inReader.nextToken();
-                System.out.println(systemPassword);
-                System.out.println(password);
-                if(validatePassword(password,systemPassword)){
-                    System.out.printf(systemUsername);
-                    login = true;
+                    // Since there is always 3 tokens of a line so take turn to
+                    // assign them into name, address and age
+                    ID = inReader.nextToken();
+                    systemUsername = inReader.nextToken();
+                    systemPassword = inReader.nextToken();
+                    System.out.println(systemPassword);
+                    System.out.println(password);
+                    if (validatePassword(password, systemPassword)) {
+                        System.out.printf(systemUsername);
+                        login = true;
+                    }
+
                 }
-
             }
+            return login;
         }
-        return login;
-    }
+
     private static boolean validatePassword(String originalPassword, String storedPassword)
             throws NoSuchAlgorithmException, InvalidKeySpecException
     {

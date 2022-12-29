@@ -5,6 +5,6 @@ import java.security.spec.InvalidKeySpecException;
 
 public class Test {
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-        System.out.println(accounts.verifyLogin());
+        accounts.registerCustomerAccount();
     }
 }
