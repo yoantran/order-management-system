@@ -27,9 +27,9 @@ public class Product {
 
         System.out.println("Please input the category of the product");
         String category = scanner.nextLine();
-        category = Method.validateCategory(category);
+        category = Method.validateCategory(category,fileName);
         Product product = new Product(productName, price, category);
-        Method.writeProductToDatabase(product, "E:\\Study\\order-management-system\\Data\\products.txt");
+        Method.writeProductToDatabase(product, fileName);
         System.out.println("Product added successfully!");
 
     }
@@ -62,4 +62,32 @@ public class Product {
     public String getCategory() {
         return category;
     }
+
+    public static void removeProductById (String id) throws IOException {
+        Method.removeById(id, "E:\\Study\\order-management-system\\Data\\products.txt");
+    }
+
+    public static void removeProductByName (String name) throws IOException {
+        Method.removeByName(name, "E:\\Study\\order-management-system\\Data\\products.txt");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

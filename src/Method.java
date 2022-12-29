@@ -1,4 +1,7 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
@@ -172,7 +175,20 @@ public class Method {
         return price;
     }
 
-    public static String validateCategory(String category) throws IOException {
+    public static String validateCategoryName(String categoryName) {
+        categoryName = Method.validateEmpty(categoryName);
+        Scanner sc = new Scanner(System.in);
+        do {
+            if (Method.ifCategoryExisted(categoryName)) {
+                categoryName = sc.nextLine();
+            } else {
+                break;
+            }
+        } while (true);
+        return categoryName;
+    }
+
+    public static String validateCategory(String category, String fileName) throws IOException {
         Scanner scanner = new Scanner(System.in);
 
         if (!Method.ifCategoryExisted(category)) {
@@ -189,15 +205,81 @@ public class Method {
             } while (true);
             if (productCase == 1) {
                 Category categoryAdd = new Category(category);
+                Method.writeCategoryToDatabase(categoryAdd, fileName);
                 System.out.println("New category added!");
             } else {
                 System.out.println("Please input the category");
                 category = scanner.nextLine();
-                category = validateCategory(category);
+                category = validateCategory(category, fileName);
             }
             return category;
         }
         return category;
+    }
+
+    public static void removeById (String id, String fileName) throws IOException {
+            // Read the data from the text file
+        List<String> lines = Files.readAllLines(Paths.get(fileName));
+
+        // Find the index of the object with the given id
+        int index = -1;
+        for (int i = 0; i < lines.size(); i++) {
+            String[] fields = lines.get(i).split(",");
+            if (fields[0].equals(id)) {
+                index = i;
+                break;
+            }
+        }
+
+        // If the object was found, remove it from the list
+        if (index != -1) {
+            lines.remove(index);
+        }
+
+        // Open the text file for writing
+        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+
+        // Write the updated list of objects to the text file
+        for (String line : lines) {
+            writer.write(line);
+            writer.newLine();
+        }
+
+        // Close the writer
+        writer.close();
+    }
+
+
+    public static void removeByName(String name, String fileName) throws IOException {
+        // Read the data from the text file
+        List<String> lines = Files.readAllLines(Paths.get(fileName));
+
+        // Find the index of the object with the given name
+        int index = -1;
+        for (int i = 0; i < lines.size(); i++) {
+            String[] fields = lines.get(i).split(",");
+            if (fields[1].equals(name)) {
+                index = i;
+                break;
+            }
+        }
+
+        // If the name was found, remove it from the list
+        if (index != -1) {
+            lines.remove(index);
+        }
+
+        // Open the text file for writing
+        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+
+        // Write the updated list of objects to the text file
+        for (String line : lines) {
+            writer.write(line);
+            writer.newLine();
+        }
+
+        // Close the writer
+        writer.close();
     }
 
 

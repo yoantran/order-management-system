@@ -14,20 +14,22 @@ public class Category {
         this.id = Method.generateID("G", "E:\\Study\\order-management-system\\Data\\category.txt");
     }
 
+    public static void addCategory (String fileName) throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please input the category's name");
+        String categoryName = scanner.nextLine();
+        categoryName = Method.validateCategoryName(categoryName);
+
+        Category category = new Category(categoryName);
+        Method.writeCategoryToDatabase(category, fileName);
+        System.out.println("Category added successfully!");
+    }
+
     public String getCategoryName() {
         return categoryName;
     }
 
     private void setCategoryName(String categoryName) {
-        categoryName = Method.validateEmpty(categoryName);
-        Scanner sc = new Scanner(System.in);
-        do {
-            if (Method.ifCategoryExisted(categoryName)) {
-                categoryName = sc.nextLine();
-            } else {
-                break;
-            }
-        } while (true);
         this.categoryName = categoryName;
     }
 
@@ -38,4 +40,30 @@ public class Category {
     public void setId(String id) {
         this.id = id;
     }
+
+    public static void removeCategoryById (String id) throws IOException {
+        Method.removeById(id, "E:\\Study\\order-management-system\\Data\\category.txt");
+    }
+
+    public static void removeCategoryByName (String name) throws IOException {
+        Method.removeByName(name, "E:\\Study\\order-management-system\\Data\\category.txt");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
