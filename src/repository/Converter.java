@@ -1,3 +1,5 @@
+package repository;
+
 import java.text.DecimalFormat;
 
 public class Converter {

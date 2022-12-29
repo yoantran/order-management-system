@@ -13,8 +13,7 @@ package order;
 
 import repository.dataManagement;
 import java.util.Scanner;
-import Converter;
-
+import repository.Converter;
 
 public class Order {
 
@@ -122,10 +121,9 @@ public class Order {
         return res;
     }
 
-    public String toDataLine() {
+    public String toString() {
         String var10000 = this.oID;
         return var10000 + "," + this.cID + "," + this.paidStatus + "," + this.convertProductList() + "," + this.date + "," + Converter.toDecimal(this.totalPrice) + "\n";
     }
-
 
 }

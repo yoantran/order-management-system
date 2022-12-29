@@ -42,91 +42,91 @@ public class dataManagement {
 
         return orderList;
     }
-//    public ArrayList<Product> readProductList() {
-//        String productItem = "";
-//        ArrayList<Product> productList = new ArrayList();
-//
-//        try {
-//            BufferedReader productReader = new BufferedReader(new FileReader("repository/items.csv"));
-//
-//            while(productItem != null) {
-//                if ((productItem = productReader.readLine()) != null) {
-//                    if (productItem.equals("")) {
-//                        productList.add(new Product());
-//                    } else {
-//                        String[] singleItem = productItem.split(",");
-//                        Product newProduct = new Product(singleItem[0], singleItem[1], singleItem[2], singleItem[3], Double.parseDouble(singleItem[4]));
-//                        productList.add(newProduct);
-//                    }
-//                }
-//            }
-//        } catch (Exception var6) {
-//            var6.printStackTrace();
-//        }
-//
-//        return productList;
-//    }
+    public ArrayList<Product> readProductList() {
+        String productItem = "";
+        ArrayList<Product> productList = new ArrayList();
 
-//    public ArrayList<Member> readCustomerList() {
-//        String userItem = "";
-//        ArrayList<Member> memberList = new ArrayList();
+        try {
+            BufferedReader productReader = new BufferedReader(new FileReader("repository/items.csv"));
+
+            while(productItem != null) {
+                if ((productItem = productReader.readLine()) != null) {
+                    if (productItem.equals("")) {
+                        productList.add(new Product());
+                    } else {
+                        String[] singleItem = productItem.split(",");
+                        Product newProduct = new Product(singleItem[0], singleItem[1], singleItem[2], singleItem[3], Double.parseDouble(singleItem[4]));
+                        productList.add(newProduct);
+                    }
+                }
+            }
+        } catch (Exception var6) {
+            var6.printStackTrace();
+        }
+
+        return productList;
+    }
+
+    public ArrayList<Member> readCustomerList() {
+        String userItem = "";
+        ArrayList<Member> memberList = new ArrayList();
+
+        try {
+            BufferedReader userReader = new BufferedReader(new FileReader("repository/customers.csv"));
+
+            while(userItem != null) {
+                if ((userItem = userReader.readLine()) != null) {
+                    String[] singleItem = userItem.split(",");
+                    Member newUser = new Member(singleItem[0], singleItem[1], singleItem[2], singleItem[3], singleItem[4], singleItem[5], Double.parseDouble(singleItem[6]));
+                    memberList.add(newUser);
+                }
+            }
+        } catch (Exception var6) {
+            var6.printStackTrace();
+        }
+
+        return memberList;
+    }
+
+    public void writeProductFile(ArrayList<Product> ProductList, boolean append) {
+        try {
+            BufferedWriter DataWriter = new BufferedWriter(new FileWriter("repository/Products.csv", append));
+            Iterator var4 = ProductList.iterator();
+
+            while(var4.hasNext()) {
+                Product product = (Product)var4.next();
+                if (product.getpID().equals("UNKNOWN")) {
+                    DataWriter.write("\n");
+                } else {
+                    DataWriter.write(product.toString());
+                }
+            }
+
+            DataWriter.close();
+        } catch (IOException var6) {
+            System.out.println("An error occurred.");
+            var6.printStackTrace();
+        }
+
+    }
 //
-//        try {
-//            BufferedReader userReader = new BufferedReader(new FileReader("repository/customers.csv"));
-//
-//            while(userItem != null) {
-//                if ((userItem = userReader.readLine()) != null) {
-//                    String[] singleItem = userItem.split(",");
-//                    Member newUser = new Member(singleItem[0], singleItem[1], singleItem[2], singleItem[3], singleItem[4], singleItem[5], Double.parseDouble(singleItem[6]));
-//                    memberList.add(newUser);
-//                }
-//            }
-//        } catch (Exception var6) {
-//            var6.printStackTrace();
-//        }
-//
-//        return memberList;
-//    }
-//
-//    public void writeProductFile(ArrayList<Product> ProductList, boolean append) {
-//        try {
-//            BufferedWriter DataWriter = new BufferedWriter(new FileWriter("repository/Products.csv", append));
-//            Iterator var4 = ProductList.iterator();
-//
-//            while(var4.hasNext()) {
-//                Product product = (Product)var4.next();
-//                if (product.getProductID().equals("UNKNOWN")) {
-//                    DataWriter.write("\n");
-//                } else {
-//                    DataWriter.write(product.toDataLine());
-//                }
-//            }
-//
-//            DataWriter.close();
-//        } catch (IOException var6) {
-//            System.out.println("An error occurred.");
-//            var6.printStackTrace();
-//        }
-//
-//    }
-//
-//    public void writeMemberFile(ArrayList<Member> MemberList, boolean append) {
-//        try {
-//            BufferedWriter DataWriter = new BufferedWriter(new FileWriter("repository/members.csv", append));
-//            Iterator var4 = MemberList.iterator();
-//
-//            while(var4.hasNext()) {
-//                Member member = (Member)var4.next();
-//                DataWriter.write(member.toDataLine());
-//            }
-//
-//            DataWriter.close();
-//        } catch (IOException var6) {
-//            System.out.println("An error occurred.");
-//            var6.printStackTrace();
-//        }
-//
-//    }
+    public void writeMemberFile(ArrayList<Member> MemberList, boolean append) {
+        try {
+            BufferedWriter DataWriter = new BufferedWriter(new FileWriter("repository/members.csv", append));
+            Iterator var4 = MemberList.iterator();
+
+            while(var4.hasNext()) {
+                Member member = (Member)var4.next();
+                DataWriter.write(member.toString());
+            }
+
+            DataWriter.close();
+        } catch (IOException var6) {
+            System.out.println("An error occurred.");
+            var6.printStackTrace();
+        }
+
+    }
 
     public void writeOrderFile(ArrayList<Order> OrderList, boolean append) {
         try {
@@ -135,7 +135,7 @@ public class dataManagement {
 
             while(var4.hasNext()) {
                 Order order = (Order)var4.next();
-                DataWriter.write(order.toDataLine());
+                DataWriter.write(order.toString());
             }
 
             DataWriter.close();
