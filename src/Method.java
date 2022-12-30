@@ -14,10 +14,10 @@ public class Method {
         try {
             FileWriter fw = new FileWriter(filename, true);
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.append(account.getId() + "," + account.getUsername() + "," + account.getPassword()
-                    + "," + account.getFullName() + "," + account.getPhoneNumber() + "," + account.getEmail()
-                    + "," + account.getAddress() + "," + account.getMembership() + "\n");
-
+            bw.append(account.getId()).append(",").append(account.getUsername()).append(",").append(account.getPassword()).append(",").append(account.getFullName()).append(",").append(account.getPhoneNumber()).append(",").append(account.getEmail()).append(",").append(",").append(account.getAddress()).append(",").append(account.getMembership()).append("\n");
+//bw.append(account.getId() + "," + account.getUsername() + "," + account.getPassword()
+//                    + "," + account.getFullName() + "," + account.getPhoneNumber() + "," + account.getEmail()
+//                    + "," + account.getAddress() + "," + account.getMembership() + "\n");
             bw.close(); // close the BufferedWriter object
             fw.close();
         } catch (IOException e) {
@@ -42,7 +42,20 @@ public class Method {
         try {
             FileWriter fw = new FileWriter(filename, true);
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.append(product.getId() + "," + product.getProductName() + "," + product.getPrice() + "," + product.getCategory());
+            bw.append(product.getId()).append(",").append(product.getProductName()).append(",").append((char) product.getPrice()).append(",").append(product.getCategory()).append("\n");
+
+            bw.close(); // close the BufferedWriter object
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error writing to database file: " + e.getMessage());
+        }
+    }
+
+    public static void writeOrderToDatabase(Order order, String filename) {
+        try {
+            FileWriter fw = new FileWriter(filename, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.append(order.getId() + "," + order.getCustomer() + "," + order.getCart() + "," + order.getDate() + "," + order.getDiscount() + "," + order.getStatus() + "\n");
 
             bw.close(); // close the BufferedWriter object
             fw.close();
@@ -109,8 +122,7 @@ public class Method {
         }
         reader.close();
         String id = lastLine.split(",")[0];
-        int numId = parseInt(id.substring(1, id.length()));
-        return numId;
+        return parseInt(id.substring(1, id.length()));
     }
     public static String generateID(String id, String fileName) throws IOException {
         int amount = readList(fileName);

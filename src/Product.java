@@ -8,7 +8,7 @@ import java.util.Scanner;
 import static java.lang.Integer.parseInt;
 
 public class Product {
-    private String id;
+    private final String id;
     private final String productName;
     private int price;
     private String category;
@@ -47,9 +47,6 @@ public class Product {
 
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public void setPrice(int price) {
         price = Method.validatePrice(price);

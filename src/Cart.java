@@ -1,3 +1,6 @@
+//https://www.quora.com/How-do-I-add-a-key-value-pair-in-ArrayList-in-Java
+
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +40,44 @@ public class Cart {
 //cart.addProduct(product2, 3);
 
 //    cart.deleteProduct(product1);
-
 //    cart.reset();
+
+    public int getTotalAmount() {
+        int totalAmount = 0;
+        for (Map.Entry<Product, Integer> entry : products.entrySet()) {
+            Product product = entry.getKey();
+            int amount = entry.getValue();
+            totalAmount += product.getPrice() * amount;
+        }
+        return totalAmount;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<Product, Integer> entry : products.entrySet()) {
+            Product product = entry.getKey();
+            int amount = entry.getValue();
+            sb.append(product.getId()).append(";").append(product.getPrice()).append(";").append(amount).append("|");
+        }
+        int length = sb.length();
+        sb.deleteCharAt(length - 1);
+        return sb.toString();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

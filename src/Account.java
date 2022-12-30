@@ -3,11 +3,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 abstract class Account {
-    private String id;
+    private final String id;
     private final String username;
     private String password;
 
-    public Account(String id, String usernameReg, String password) throws NoSuchAlgorithmException {
+    public Account(String id, String usernameReg, String password) {
         this.id = id;
         Scanner sc = new Scanner(System.in);
 
@@ -21,10 +21,10 @@ abstract class Account {
         this.username = usernameReg;
         this.password = password;
 
-
     }
 
-    public Account(String username) {
+    public Account(String id, String username) {
+        this.id = id;
 
         this.username = username;
     }
@@ -33,9 +33,6 @@ abstract class Account {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;

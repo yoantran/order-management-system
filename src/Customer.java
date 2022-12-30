@@ -5,9 +5,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
-import static java.lang.Integer.parseInt;
+import static java.lang.Long.parseLong;
 
 class Customer extends Account {
     private String fullName;
@@ -22,7 +21,6 @@ class Customer extends Account {
 
     public Customer(String id, String username, String password, String fullName, String phoneNumber, String email, String address) throws FileNotFoundException, NoSuchAlgorithmException {
         super(id, username, password);
-        setId(id);
         setFullName(fullName);
         setPhoneNumber(phoneNumber);
         setAddress(address);
@@ -98,7 +96,6 @@ class Customer extends Account {
     }
 
     public void setAddress(String address) {
-        Scanner sc = new Scanner(System.in);
         address = Method.validateEmpty(address);
         this.address = address;
     }
@@ -144,6 +141,30 @@ class Customer extends Account {
         }
 
         return customers;
+    }
+
+    public long totalSpend() throws IOException {
+        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\order.txt"));
+        long totalSpend = 0;
+
+        // Find the index of the object with the given id
+        for (int i = 0; i < lines.size(); i++) {
+            String[] fields = lines.get(i).split(",");
+            if (fields[1].equals(this.getId())) {
+                String[] products = fields[2].split("\\|");
+                long totalCart = 0;
+                for (int l = 0; l < products.length; l++) {
+                    String[] product = products[l].split(";");
+                    totalCart += parseLong(product[1]) * parseLong(product[2]);
+                }
+                totalCart *= parseLong(fields[4]);
+                totalSpend += totalCart;
+            }
+        }
+
+        return totalSpend;
+
+
     }
 
 
