@@ -133,6 +133,35 @@ public class Product {
     }
 
 
+    public static List<Product> listProductsByPriceRange(int minPrice, int maxPrice, String fileName) throws IOException {
+        // Read the product data from the text file
+        List<String> lines = Files.readAllLines(Paths.get(fileName));
+
+        // Parse the lines into a list of Product objects
+        List<Product> products = new ArrayList<>();
+        for (String line : lines) {
+            String[] fields = line.split(",");
+            int price = Integer.parseInt(fields[2]);
+            if (price >= minPrice && price <= maxPrice) {
+                products.add(new Product(fields[0], fields[1], price, fields[3]));
+            }
+        }
+
+        return products;
+
+//        List<Product> products = Product.listProductsByPriceRange(50, 100, "E:\\Study\\order-management-system\\Data\\products.txt");
+
+//        for (Product product : products) {
+//    System.out.println("ID: " + product.getId());
+//    System.out.println("Product name: " + product.getProductName());
+//    System.out.println("Price: " + product.getPrice());
+//    System.out.println("Category: " + product.getCategory());
+//}
+    }
+
+
+
+
 
 
 
