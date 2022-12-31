@@ -1,10 +1,12 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 public class Test {
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-        accounts.registerCustomerAccount();
+        Customer cus1 = new Customer();
+        cus1.verifyCustomerLogin();
+        System.out.println(cus1.toString());
+        cus1.updateInfo(cus1.getID());
     }
 }
