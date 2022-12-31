@@ -163,35 +163,20 @@ class Customer extends Account {
         }
 
         return totalSpend;
-
-
     }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id='" + this.getId() + '\'' +
+                ", username='" + this.getUsername() + '\'' +
+                "fullName='" + fullName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", email='" + email + '\'' +
+                ", membership='" + membership + '\'' +
+                '}';
+    }
 }

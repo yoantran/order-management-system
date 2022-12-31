@@ -130,21 +130,23 @@ public class Product {
     }
 
 
-    public static List<Product> listProductsByPriceRange(int minPrice, int maxPrice, String fileName) throws IOException {
+    public static List<Product> listProductsInPriceRangeAndCategory(int minPrice, int maxPrice, String category) throws IOException {
         // Read the product data from the text file
-        List<String> lines = Files.readAllLines(Paths.get(fileName));
+        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\products.txt"));
 
         // Parse the lines into a list of Product objects
         List<Product> products = new ArrayList<>();
         for (String line : lines) {
             String[] fields = line.split(",");
             int price = Integer.parseInt(fields[2]);
-            if (price >= minPrice && price <= maxPrice) {
+            if (price >= minPrice && price <= maxPrice && category.equals(fields[3])) {
                 products.add(new Product(fields[0], fields[1], price, fields[3]));
             }
         }
 
         return products;
+    }
+
 
 //        List<Product> products = Product.listProductsByPriceRange(50, 100, "E:\\Study\\order-management-system\\Data\\products.txt");
 
@@ -154,27 +156,50 @@ public class Product {
 //    System.out.println("Price: " + product.getPrice());
 //    System.out.println("Category: " + product.getCategory());
 //}
+    public static Product findProductById(String id) throws IOException {
+        // Read the product data from the text file
+        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\products.txt"));
+
+        // Find the product with the given id
+        for (String line : lines) {
+            String[] fields = line.split(",");
+            if (id.equals(fields[0])) {
+                return new Product(fields[0], fields[1], Integer.parseInt(fields[2]), fields[3]);
+            }
+        }
+
+    return null;
+}
+
+    public static Product findProductByName(String name) throws IOException {
+        // Read the product data from the text file
+        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\products.txt"));
+
+        // Find the product with the given name
+        for (String line : lines) {
+            String[] fields = line.split(",");
+            if (name.equals(fields[1])) {
+                return new Product(fields[0], fields[1], Integer.parseInt(fields[2]), fields[3]);
+            }
+        }
+
+        return null;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id='" + id + '\'' +
+                ", productName='" + productName + '\'' +
+                ", price=" + price +
+                ", category='" + category + '\'' +
+                '}';
+    }
 }
+
+
+
+
+
+
+

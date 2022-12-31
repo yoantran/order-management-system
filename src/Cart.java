@@ -42,7 +42,7 @@ public class Cart {
 //    cart.deleteProduct(product1);
 //    cart.reset();
 
-    public int getTotalAmount() {
+    public double getTotalAmount() {
         int totalAmount = 0;
         for (Map.Entry<Product, Integer> entry : products.entrySet()) {
             Product product = entry.getKey();

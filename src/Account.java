@@ -87,6 +87,13 @@ abstract class Account {
         }
        return account;
 
+    }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                '}';
     }
 }
