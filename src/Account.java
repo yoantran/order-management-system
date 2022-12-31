@@ -10,14 +10,6 @@ abstract class Account {
     public Account(String id, String usernameReg, String password) {
         this.id = id;
         Scanner sc = new Scanner(System.in);
-
-        do {
-            if (Method.ifUsernameExisted("E:\\Study\\order-management-system\\Data\\account.txt", usernameReg)) {
-                usernameReg = sc.nextLine();
-            } else {
-                break;
-            }
-        } while (true);
         this.username = usernameReg;
         this.password = password;
 
@@ -52,6 +44,8 @@ abstract class Account {
         return password;
     }
 
+
+
    public static Account login(String file, String username, String password) throws IOException, NoSuchAlgorithmException {
         Account account = null;
 
@@ -72,7 +66,7 @@ abstract class Account {
                 String[] data = line.split(","); // split line by comma delimiter
 
                 if (username.equals(data[1]) && (password.equals(data[2]))) {
-                    account = new Customer(data[0], data[1], data[2], data[3], data[4],data[5],data[6]);
+                    account = new Customer(data[0], data[1], data[2], data[3], data[4],data[5],data[6],data[7]);
                     return account;
                 }
             }

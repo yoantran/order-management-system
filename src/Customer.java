@@ -29,7 +29,7 @@ class Customer extends Account {
 
     }
 
-    public Customer(String id, String usernameReg, String password, String fullName, String phoneNumber, String address, String email, String membership) throws NoSuchAlgorithmException {
+    public Customer(String id, String usernameReg, String password, String fullName, String phoneNumber, String email, String address, String membership) throws NoSuchAlgorithmException {
         super(id, usernameReg, password);
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
@@ -40,8 +40,18 @@ class Customer extends Account {
 
     public static void registerAccount(String filename) throws IOException, NoSuchAlgorithmException {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter a username and password:");
+        System.out.println("Enter a username:");
         String username = scanner.nextLine();
+        Scanner sc = new Scanner(System.in);
+        do {
+            if (Method.ifUsernameExisted("E:\\Study\\order-management-system\\Data\\account.txt", username)) {
+                username = sc.nextLine();
+            } else {
+                break;
+            }
+        } while (true);
+
+        System.out.println("Enter your password:");
         String password = scanner.nextLine();
 
         System.out.println("Please enter your full name");
@@ -131,7 +141,7 @@ class Customer extends Account {
 
     public static List<Customer> listCustomers() throws IOException, NoSuchAlgorithmException {
         // Read the category data from the text file
-        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\category.txt"));
+        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\account.txt"));
 
         // Parse the lines into a list of Category objects
         List<Customer> customers = new ArrayList<>();
@@ -172,7 +182,7 @@ class Customer extends Account {
         return "Customer{" +
                 "id='" + this.getId() + '\'' +
                 ", username='" + this.getUsername() + '\'' +
-                "fullName='" + fullName + '\'' +
+                ", fullName='" + fullName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", address='" + address + '\'' +
                 ", email='" + email + '\'' +

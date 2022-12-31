@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -185,6 +186,47 @@ public class Product {
 
         return null;
     }
+
+    public static void changePriceById(String id, int newPrice) throws IOException {
+        // Read the product data from the text file
+        Path path = Paths.get("E:\\Study\\order-management-system\\Data\\products.txt");
+        List<String> lines = Files.readAllLines(path);
+
+        // Find the product with the given id and update its price
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            String[] fields = line.split(",");
+            if (id.equals(fields[0])) {
+                fields[2] = String.valueOf(newPrice);
+                lines.set(i, String.join(",", fields));
+                break;
+            }
+        }
+
+        // Write the updated product data back to the text file
+        Files.write(path, lines);
+    }
+
+    public static void changePriceByName(String name, int newPrice) throws IOException {
+        // Read the product data from the text file
+        Path path = Paths.get("E:\\Study\\order-management-system\\Data\\products.txt");
+        List<String> lines = Files.readAllLines(path);
+
+        // Find the product with the given id and update its price
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            String[] fields = line.split(",");
+            if (name.equals(fields[1])) {
+                fields[2] = String.valueOf(newPrice);
+                lines.set(i, String.join(",", fields));
+                break;
+            }
+        }
+
+        // Write the updated product data back to the text file
+        Files.write(path, lines);
+    }
+
 
     @Override
     public String toString() {

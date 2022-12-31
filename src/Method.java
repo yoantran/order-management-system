@@ -18,7 +18,7 @@ public class Method {
         try {
             FileWriter fw = new FileWriter(filename, true);
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.append(account.getId()).append(",").append(account.getUsername()).append(",").append(account.getPassword()).append(",").append(account.getFullName()).append(",").append(account.getPhoneNumber()).append(",").append(account.getEmail()).append(",").append(",").append(account.getAddress()).append(",").append(account.getMembership()).append("\n");
+            bw.append(account.getId()).append(",").append(account.getUsername()).append(",").append(account.getPassword()).append(",").append(account.getFullName()).append(",").append(account.getPhoneNumber()).append(",").append(account.getEmail()).append(",").append(account.getAddress()).append(",").append(account.getMembership()).append("\n");
 //bw.append(account.getId() + "," + account.getUsername() + "," + account.getPassword()
 //                    + "," + account.getFullName() + "," + account.getPhoneNumber() + "," + account.getEmail()
 //                    + "," + account.getAddress() + "," + account.getMembership() + "\n");
@@ -125,8 +125,12 @@ public class Method {
             lastLine = line;
         }
         reader.close();
-        String id = lastLine.split(",")[0];
-        return parseInt(id.substring(1, id.length()));
+        if (lastLine.equals("")) {
+            return 0;
+        } else {
+            String id = lastLine.split(",")[0];
+            return parseInt(id.substring(1));
+        }
     }
     public static String generateID(String id, String fileName) throws IOException {
         int amount = readList(fileName);
