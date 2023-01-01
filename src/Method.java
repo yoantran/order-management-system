@@ -2,9 +2,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -46,7 +44,8 @@ public class Method {
         try {
             FileWriter fw = new FileWriter(filename, true);
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.append(product.getId()).append(",").append(product.getProductName()).append(",").append((char) product.getPrice()).append(",").append(product.getCategory()).append("\n");
+            String s = String.valueOf(product.getPrice());
+            bw.append(product.getId()).append(",").append(product.getProductName()).append(",").append(s).append(",").append(product.getCategory()).append("\n");
 
             bw.close(); // close the BufferedWriter object
             fw.close();
@@ -59,7 +58,7 @@ public class Method {
         try {
             FileWriter fw = new FileWriter(filename, true);
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.append(order.getId() + "," + order.getCustomer() + "," + order.getCart().toString() + "," + order.getDate() + "," + order.getDiscount() + "," + order.getStatus() + "\n");
+            bw.append(order.getId() + "," + order.getCustomer() + "," + order.getCart().toString() + "," + order.getDateTime() + "," + order.getDiscount() + "," + order.getStatus() + "\n");
 
             bw.close(); // close the BufferedWriter object
             fw.close();
@@ -102,7 +101,6 @@ public class Method {
                 String[] data = line.split(","); // split line by comma delimiter
 
                 if (category.equals(data[1])) {
-                    System.out.println("Category existed! Please choose another one!");
                     return true;
                 }
             }
@@ -202,6 +200,7 @@ public class Method {
         Scanner sc = new Scanner(System.in);
         do {
             if (Method.ifCategoryExisted(categoryName)) {
+                System.out.println("Category existed! Please choose another one!");
                 categoryName = sc.nextLine();
             } else {
                 break;
@@ -304,23 +303,7 @@ public class Method {
         writer.close();
     }
 
-    public static void replaceCategory(String oldCategory, String newCategory) throws IOException {
-        // Read the product data from the text file
-        Path path = Paths.get("E:\\Study\\order-management-system\\Data\\products.txt");
-        List<String> lines = Files.readAllLines(path);
 
-        // Replace the category name in each line
-        for (int i = 0; i < lines.size(); i++) {
-            String[] fields = lines.get(i).split(",");
-            if (fields[3].equals(oldCategory)) {
-                fields[3] = newCategory;
-                lines.set(i, fields[0] + "," + fields[1] + "," + fields[2] + "," + fields[3]);
-            }
-        }
-
-        // Write the modified lines back to the text file
-        Files.write(path, lines);
-    }
 
     public static Customer updateCustomerInformation(Customer customer) throws IOException {
         Scanner sc = new Scanner(System.in);
@@ -397,36 +380,17 @@ public class Method {
 
     }
 
-    public static Order findOrderById(String id, Customer customerRequest) throws IOException, ParseException {
 
 
-
-        // Read the order data from the text file
-        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\orders.txt"));
-
-        // Find the order with the given id
-        for (String line : lines) {
-            String[] fields = line.split(",");
-            if (id.equals(fields[0])) {
-                // Parse the date field
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date date = dateFormat.parse(fields[3]);
-                Cart cart = null;
-                // Find the cart and customer objects
-                String[] products = fields[2].split("\\|");
-                for (int l = 0; l < products.length; l++) {
-                    String[] product = products[l].split(";");
-                    cart.addProduct(Product.findProductById(product[0]), Integer.parseInt(product[2]));
-                }
-                if (!customerRequest.equals(fields[1])) {
-                    System.out.println("You don't have permission to perform this action!");
-                    return null;
-                }
-                return new Order(fields[0], fields[1], cart, date, Double.parseDouble(fields[4]), fields[5]);
-            }
+    public static void printOrders(List<Order> orders) {
+        for (Order order : orders) {
+            String id = order.getId();
+            Cart carT = order.getCart();
+            String customerID = order.getCustomer();
+            LocalDateTime date = order.getDateTime();
+            String status = order.getStatus();
+            System.out.println(id + " - " + carT + " - " + customerID + " - " + date + " - " + status + " - " + order.totalPrice());
         }
-
-        return null;
     }
 
 

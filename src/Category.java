@@ -1,11 +1,8 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -57,7 +54,25 @@ public class Category {
 
     public static void removeCategoryByName (String name) throws IOException {
         Method.removeByName(name, "E:\\Study\\order-management-system\\Data\\category.txt");
-        Method.replaceCategory(name, "None");
+        replaceCategory(name, "None");
+    }
+
+    public static void replaceCategory(String oldCategory, String newCategory) throws IOException {
+        // Read the product data from the text file
+        Path path = Paths.get("E:\\Study\\order-management-system\\Data\\products.txt");
+        List<String> lines = Files.readAllLines(path);
+
+        // Replace the category name in each line
+        for (int i = 0; i < lines.size(); i++) {
+            String[] fields = lines.get(i).split(",");
+            if (fields[3].equals(oldCategory)) {
+                fields[3] = newCategory;
+                lines.set(i, fields[0] + "," + fields[1] + "," + fields[2] + "," + fields[3]);
+            }
+        }
+
+        // Write the modified lines back to the text file
+        Files.write(path, lines);
     }
 
     public static List<Category> listCategories() throws IOException {
@@ -74,21 +89,11 @@ public class Category {
         return categories;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id='" + id + '\'' +
+                ", categoryName='" + categoryName + '\'' +
+                '}';
+    }
 }

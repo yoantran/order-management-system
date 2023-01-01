@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -11,7 +13,6 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         String fileAccount = "E:\\Study\\order-management-system\\Data\\account.txt";
-        String fileAdmin = "E:\\Study\\order-management-system\\Data\\admin.txt";
         String fileCategory = "E:\\Study\\order-management-system\\Data\\category.txt";
         String fileOrder = "E:\\Study\\order-management-system\\Data\\order.txt";
         String fileProduct = "E:\\Study\\order-management-system\\Data\\products.txt";
@@ -22,12 +23,15 @@ public class Main {
         String choiceInfo = null;
         boolean isLogged = false;
         boolean isLoggedAdmin = false;
+        boolean isSystem = true;
 
 
+        while (isSystem) {
         while (true) {
             System.out.println("Enter 1 to register, 2 to login, or 0 to exit:");
             int option = scanner.nextInt();
             if (option == 0) {
+                isSystem = false;
                 System.out.println("Thank you and Goodbye!");
                 break;
             }
@@ -43,7 +47,7 @@ public class Main {
                     if (currentAccount.isAdmin()) {
                         System.out.printf("Admin logged in, welcome to Order Management System\n");
                         isLoggedAdmin = true;
-                    } else {
+                    } else if (!currentAccount.isAdmin()) {
                         currentCustomer = (Customer) currentAccount;
 
                         System.out.printf("Logged in, welcome %s to Order Management System\n", currentCustomer.getUsername());
@@ -227,7 +231,7 @@ public class Main {
                         System.out.println("Coming back to main screen... ");
                         break;
                     }
-                    Order orderRequested = Method.findOrderById(orderFindingId, currentCustomer);
+                    Order orderRequested = Order.findOrderById(orderFindingId, currentCustomer);
                     if (orderRequested == null) {
                         System.out.printf("There is no order with id %s. \n", orderFindingId);
                     } else {
@@ -241,14 +245,7 @@ public class Main {
                     System.out.println("Orders will be display as \"Id - Cart - Customer ID - Date - Status - Total price");
                     System.out.println("All orders has been made by you is:");
                     List<Order> orders = Order.findOrdersByCustomerId(currentCustomer.getId());
-                    for (Order order : orders) {
-                        String id = order.getId();
-                        Cart carT = order.getCart();
-                        String customerID = order.getCustomer();
-                        Date date = order.getDate();
-                        String status = order.getStatus();
-                        System.out.println(id + " - " + carT + " - " + customerID + " - " + date + " - " + status + " - " + order.totalPrice());
-                    }
+                    Method.printOrders(orders);
                     System.out.println("Press enter to come back to main screen");
                     scanner.nextLine();
                     System.out.println("Coming back to main screen... ");
@@ -259,6 +256,7 @@ public class Main {
                     if (signOutCheck.equals("yes")) {
                         isLogged = false;
                         System.out.println("You have logged out!");
+                        currentAccount = null;
                     } else {
                         System.out.println("Press enter to come back to main screen");
                         scanner.nextLine();
@@ -314,7 +312,7 @@ public class Main {
                     System.out.printf("Do you want to:" +
                             "\n\t(1) Remove a customer by ID" +
                             "\n\t(2) Remove a customer by username" +
-                            "\n\t(3) Go back to main menu.");
+                            "\n\t(3) Go back to main menu.\n");
                     choiceInfo = scanner.nextLine();
                     if (choiceInfo.equals("1")) {
                         System.out.println("Please input the id of the customer");
@@ -337,16 +335,9 @@ public class Main {
                     System.out.println("Please input the id of the customer you would like to check");
                     String customerIdRequest = scanner.nextLine();
                     System.out.println("Orders will be display as \"Id - Cart - Customer ID - Date - Status - Total price");
-                    System.out.printf("All orders has been made by the customer with id %s are:", customerIdRequest);
+                    System.out.printf("All orders has been made by the customer with id %s are:\n", customerIdRequest);
                     List<Order> orders = Order.findOrdersByCustomerId(customerIdRequest);
-                    for (Order order : orders) {
-                        String id = order.getId();
-                        Cart carT = order.getCart();
-                        String customerID = order.getCustomer();
-                        Date date = order.getDate();
-                        String status = order.getStatus();
-                        System.out.println(id + " - " + cart + " - " + customerID + " - " + date + " - " + status + " - " + order.totalPrice());
-                    }
+                    Method.printOrders(orders);
                     System.out.println("Press enter to come back to main screen");
                     scanner.nextLine();
                     System.out.println("Coming back to main screen... ");
@@ -407,18 +398,18 @@ public class Main {
                         System.out.printf("Do you want to remove a product by" +
                                 "\n\t (1) Id" +
                                 "\n\t (2) Name" +
-                                "\n\t (3) Back to main menu");
+                                "\n\t (3) Back to main menu\n");
                         String removeChoice = scanner.nextLine();
                         if (removeChoice.equals("1")) {
                             System.out.println("Please input the id of the product");
                             String productIdRequest = scanner.nextLine();
                             Method.removeById(productIdRequest, fileProduct);
-                            System.out.printf("Product with id %s is removed!", productIdRequest);
+                            System.out.printf("Product with id %s is removed!\n", productIdRequest);
                         } else if (removeChoice.equals("2")) {
                             System.out.println("Please input the name of the product");
                             String productNameRequest = scanner.nextLine();
                             Method.removeByName(productNameRequest, fileProduct);
-                            System.out.printf("Product with id %s is removed!", productNameRequest);
+                            System.out.printf("Product with id %s is removed!\n", productNameRequest);
                         } else {
                             break;
                         }
@@ -426,7 +417,7 @@ public class Main {
                         System.out.printf("Do you want to change a product price by" +
                                 "\n\t (1) Id" +
                                 "\n\t (2) Name" +
-                                "\n\t (3) Back to main menu");
+                                "\n\t (3) Back to main menu\n");
                         String changeChoice = scanner.nextLine();
                         Product productNew = null;
                         if (changeChoice.equals("1")) {
@@ -437,7 +428,7 @@ public class Main {
                             int newPrice = scanner.nextInt();
                             scanner.nextLine();
                             Product.changePriceById(productIdRequest,newPrice);
-                            System.out.printf("Product with id %s is has change the price from %s to %s!", productIdRequest, productNew.getPrice(),newPrice);
+                            System.out.printf("Product with id %s is has change the price from %s to %s!\n", productIdRequest, productNew.getPrice(),newPrice);
                         } else if (changeChoice.equals("2")) {
                             System.out.println("Please input the name of the product");
                             String productNameRequest = scanner.nextLine();
@@ -446,7 +437,7 @@ public class Main {
                             int newPrice = scanner.nextInt();
                             scanner.nextLine();
                             Product.changePriceByName(productNameRequest,newPrice);
-                            System.out.printf("Product with name %s is has change the price from %s to %s!", productNameRequest, productNew.getPrice(),newPrice);
+                            System.out.printf("Product with name %s is has change the price from %s to %s!\n", productNameRequest, productNew.getPrice(),newPrice);
                         } else {
                             break;
                         }
@@ -461,11 +452,12 @@ public class Main {
                     break;
                 case 5:
                     Product.addProduct(fileProduct);
+                    break;
                 case 6:
                     System.out.printf("Do you want to remove a product by" +
                             "\n\t (1) Id" +
                             "\n\t (2) Name" +
-                            "\n\t (3) Back to main menu");
+                            "\n\t (3) Back to main menu\n");
                     String removeChoice = scanner.nextLine();
                     if (removeChoice.equals("1")) {
                         System.out.println("Please input the id of the product");
@@ -488,7 +480,7 @@ public class Main {
                     System.out.printf("Do you want to change a product price by" +
                             "\n\t (1) Id" +
                             "\n\t (2) Name" +
-                            "\n\t (3) Back to main menu");
+                            "\n\t (3) Back to main menu\n");
                     String changeChoice = scanner.nextLine();
                     Product productNew = null;
                     if (changeChoice.equals("1")) {
@@ -499,7 +491,7 @@ public class Main {
                         int newPrice = scanner.nextInt();
                         scanner.nextLine();
                         Product.changePriceById(productIdRequest,newPrice);
-                        System.out.printf("Product with id %s is has change the price from %s to %s!", productIdRequest, productNew.getPrice(),newPrice);
+                        System.out.printf("Product with id %s is has change the price from %s to %s!\n", productIdRequest, productNew.getPrice(),newPrice);
                     } else if (changeChoice.equals("2")) {
                         System.out.println("Please input the name of the product");
                         String productNameRequest = scanner.nextLine();
@@ -508,7 +500,7 @@ public class Main {
                         int newPrice = scanner.nextInt();
                         scanner.nextLine();
                         Product.changePriceByName(productNameRequest,newPrice);
-                        System.out.printf("Product with name %s is has change the price from %s to %s!", productNameRequest, productNew.getPrice(),newPrice);
+                        System.out.printf("Product with name %s is has change the price from %s to %s!\n", productNameRequest, productNew.getPrice(),newPrice);
                     } else {
                         break;
                     }
@@ -518,8 +510,73 @@ public class Main {
                     break;
                 case 8:
                     System.out.println("List of orders:");
+                    orders = Order.listOrders();
+                    Method.printOrders(orders);
+                    System.out.println("Press enter to come back to main screen");
+                    scanner.nextLine();
+                    System.out.println("Coming back to main screen... ");
+                    break;
+                case 9:
+                    System.out.println("Please input the year:");
+                    int dateCheckYear = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println("Please input the month:");
+                    int dateCheckMonth = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println("Please input the day:");
+                    int dateCheckDay = scanner.nextInt();
+                    scanner.nextLine();
+                    LocalDate date = LocalDate.of(dateCheckYear, dateCheckMonth, dateCheckDay);
+                    orders = Order.findOrdersByDate(date);
+                    System.out.printf("All orders on %s %s, %s is:\n", dateCheckDay, dateCheckMonth, dateCheckYear);
+                    Method.printOrders(orders);
+                    System.out.println("Press enter to come back to main screen");
+                    scanner.nextLine();
+                    System.out.println("Coming back to main screen... ");
+                    break;
+                case 10:
+                    break;
+                case 11:
+                    System.out.println("List of all categories is presents as \"ID - Name\"");
+                    List<Category> categories = Category.listCategories();
+                    for (Category category : categories) {
+                        System.out.println(category);
+                    }
+                    System.out.println("Press enter to come back to main screen");
+                    scanner.nextLine();
+                    System.out.println("Coming back to main screen... ");
+                    break;
+                case 12:
+                    Category.addCategory(fileCategory);
+                    System.out.println("Press enter to come back to main screen");
+                    System.out.println("Coming back to main screen... ");
+                    break;
+                case 13:
+                    System.out.println("Please input the name of the category");
+                    String categoryNameRequest = scanner.nextLine();
+                    Category.removeCategoryByName(categoryNameRequest);
+                    System.out.printf("The category %s has been removed. All products with category %s are no longer belong to a category!\n", categoryNameRequest, categoryNameRequest);
+                    System.out.println("Press enter to come back to main screen");
+                    System.out.println("Coming back to main screen... ");
+                    break;
+                case 14:
+                    System.out.println("Do you want to sign out? yes/no");
+                    String signOutCheck = scanner.nextLine();
+                    if (signOutCheck.equals("yes")) {
+                        isLoggedAdmin = false;
+                        System.out.println("You have logged out!");
+                        currentAccount = null;
+
+                    } else {
+                        System.out.println("Press enter to come back to main screen");
+                        scanner.nextLine();
+                        System.out.println("Coming back to main screen... ");
+                    }
+                    break;
             }
         }
+    }
+
     }
 }
 

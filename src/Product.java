@@ -41,7 +41,7 @@ public class Product {
 
         System.out.println("Please input the category of the product");
         String category = scanner.nextLine();
-        category = Method.validateCategory(category,fileName);
+        category = Method.validateCategory(category,"E:\\Study\\order-management-system\\Data\\category.txt");
         Product product = new Product(productName, price, category);
         Method.writeProductToDatabase(product, fileName);
         System.out.println("Product added successfully!");
@@ -84,7 +84,7 @@ public class Product {
 
     public static List<Product> listProducts() throws IOException {
         // Read the category data from the text file
-        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\category.txt"));
+        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\products.txt"));
 
         // Parse the lines into a list of Category objects
         List<Product> products = new ArrayList<>();
