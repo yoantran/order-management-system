@@ -2,9 +2,13 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.io.*;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -318,64 +322,50 @@ public class Customer {
             return hex;
         }
 
-} public static void updateInfo(String ID) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-       FileWriter fw = new FileWriter("C:\\Users\\Hy\\Downloads\\GitHub\\order-management-system\\Group_Project\\src\\account.txt", false);
-        BufferedWriter bw = new BufferedWriter(fw);
-        Scanner fileScanner = new Scanner(new File("C:\\\\Users\\\\Hy\\\\Downloads\\\\GitHub\\\\order-management-system\\\\Group_Project\\\\src\\\\account.txt"));
-        while (fileScanner.hasNext()) {
-            String line = fileScanner.nextLine();
-            StringTokenizer inReader = new StringTokenizer(line," , ");
-            if(inReader.countTokens() != 8){
-                throw new IOException("Invalid Input Format");
-            }
-            else{
-                String userID = inReader.nextToken();
-                String userName = inReader.nextToken();
-                String password = inReader.nextToken();
-                String fullName = inReader.nextToken();
-                int phoneNumber = Integer.parseInt(inReader.nextToken());
-                String email = inReader.nextToken();
-                String address = inReader.nextToken();
-                String accountType = inReader.nextToken();
-                if(userID.equals(ID) && accountType.equals("Customer")){
-                    Scanner sc = new Scanner(System.in);
-                    System.out.println("Which part do you want to edit? \n 1. Username 2. Password 3. Full name 4. Phone Number 5. Email 6. Address");
-                    int options = Integer.parseInt(sc.nextLine());
-                    switch (options) {
-                        case 1:
-                            System.out.println("What do you want to change your username to?");
-                            String newUserName = sc.nextLine();
-                            if(checkUser(newUserName)) {
-                                userName = newUserName;
-                            }
-                            break;
-                        case 2:
-                            System.out.println("What do you want to change your password to?");
-                            password = generateStorngPasswordHash(sc.nextLine());
-                            break;
-                        case 3:
-                            System.out.println("What do you want to change your full name to?");
-                            fullName = sc.nextLine();
-                            break;
-                        case 4:
-                            System.out.println("What do you want to change your phone number to?");
-                            phoneNumber = Integer.parseInt(sc.nextLine());
-                            break;
-                        case 5:
-                            System.out.println("What do you want to change your emails to?");
-                            email = sc.nextLine();
-                            break;
-                        case 6:
-                            System.out.println("What do you want to change your address to?");
-                            address = sc.nextLine();
-                            break;
-                    }
-                    bw.write(ID + " , " + userName + " , " + password + " , " + fullName + " , " + phoneNumber + " , " + email + " , " + address + " , " +  accountType);
-                }
-                bw.close();
+} public static Customer updateInfo(Customer customer) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Which part are you going to change? \n 1. Full Name 2. Phone Number 3. Email 4. Address ");
+        int options = Integer.parseInt(sc.nextLine());
+        switch(options){
+            case 1:
+                System.out.println("What new full name are you going to use?");
+                String newFullName = sc.nextLine();
+                customer.setFullName(newFullName);
+                break;
+            case 2:
+                System.out.println("What new phone number are you going to use");
+                int newPhoneNumber = Integer.parseInt(sc.nextLine());
+                customer.setPhoneNumber(newPhoneNumber);
+                break;
+            case 3:
+                System.out.println("What new email are you going to use?");
+                String newEmail = sc.nextLine();
+                customer.setEmail(newEmail);
+                break;
+            case 4:
+                System.out.println("What new address are you going to use?");
+                String newAddress = sc.nextLine();
+                customer.setAddress(newAddress);
+                break;
+        }
+        Path path = Paths.get("C:\\Users\\Hy\\Downloads\\GitHub\\order-management-system\\Group_Project\\src\\account.txt");
+        List<String> lines = Files.readAllLines(path);
+
+        for(int i = 0 ; i < lines.size() ; i++){
+            String[] fields = lines.get(i).split(" , ");
+            if(fields[0].equals(customer.getID())){
+                fields[3] = customer.getFullName();
+                fields[4] = String.valueOf(customer.getPhoneNumber());
+                fields[5] = customer.getEmail();
+                fields[6] = customer.getAddress();
+                lines.set(i, fields[0] + " , " + fields[1] + " , " + fields[2] + " , " + fields[3] + " , " + fields[4] + " , " + fields[5] + " , " + fields[6] + " , " + fields[7]);
+                break;
             }
         }
-    }
+        Files.write(path ,lines);
+        return customer;
+        }
+            
 
     @Override
     public String toString() {
