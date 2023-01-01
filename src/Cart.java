@@ -18,11 +18,6 @@ public class Cart {
         products.put(product, amount);
     }
 
-    public void addProduct(Product product) {
-        addProduct(product, 1);
-    }
-
-
     public void deleteProduct(Product product) {
         products.remove(product);
     }
