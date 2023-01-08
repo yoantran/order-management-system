@@ -2,6 +2,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
@@ -54,18 +55,7 @@ public class Method {
         }
     }
 
-    public static void writeOrderToDatabase(Order order, String filename) {
-        try {
-            FileWriter fw = new FileWriter(filename, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.append(order.getId() + "," + order.getCustomer() + "," + order.getCart().toString() + "," + order.getDateTime() + "," + order.getDiscount() + "," + order.getStatus() + "\n");
 
-            bw.close(); // close the BufferedWriter object
-            fw.close();
-        } catch (IOException e) {
-            System.out.println("Error writing to database file: " + e.getMessage());
-        }
-    }
 
 
 
@@ -382,12 +372,12 @@ public class Method {
 
 
 
-    public static void printOrders(List<Order> orders) {
+    public static void printOrders(List<Order> orders) throws IOException {
         for (Order order : orders) {
             String id = order.getId();
             Cart carT = order.getCart();
             String customerID = order.getCustomer();
-            LocalDateTime date = order.getDateTime();
+            LocalDate date = order.getDateTime();
             String status = order.getStatus();
             System.out.println(id + " - " + carT + " - " + customerID + " - " + date + " - " + status + " - " + order.totalPrice());
         }

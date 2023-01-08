@@ -2,8 +2,6 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -18,9 +16,9 @@ public class Main {
         String fileProduct = "E:\\Study\\order-management-system\\Data\\products.txt";
         Account currentAccount = null;
         Customer currentCustomer = null;
-        Cart cart = null;
-        int choice = 0;
-        String choiceInfo = null;
+        Cart cart = new Cart();
+        int choice;
+        String choiceInfo;
         boolean isLogged = false;
         boolean isLoggedAdmin = false;
         boolean isSystem = true;
@@ -63,18 +61,19 @@ public class Main {
             while (isLogged) {
                 choice = 0;
 
-                System.out.printf("Please choose the action:\n\tChoose \"1\" if you want to check or update your information" +
-                        "\n\tChoose \"2\" if you want to check your current membership status" +
-                        "\n\tChoose \"3\" if you want to list all products" +
-                        "\n\tChoose \"4\" if you want to search for a product" +
-                        "\n\tChoose \"5\" if you want to check on your cart" +
-                        "\n\tChoose \"6\" if you want to add product to your cart" +
-                        "\n\tChoose \"7\" if you want to remove a product in your cart" +
-                        "\n\tChoose \"8\" if you want to reset your cart" +
-                        "\n\tChoose \"9\" if you want to place your order" +
-                        "\n\tChoose \"10\" if you want to get information about a particular order" +
-                        "\n\tChoose \"11\" if you want to get information of all orders made by you" +
-                        "\n\tChoose \"12\" if you want to sign out!\n");
+                System.out.printf("Please choose the action:" +
+                        "\n\t- (1)  Check or update your information" +
+                        "\n\t- (2)  Check your current membership status" +
+                        "\n\t- (3)  List all products" +
+                        "\n\t- (4)  Search for a product" +
+                        "\n\t- (5)  Check on your cart" +
+                        "\n\t- (6)  Add product to your cart" +
+                        "\n\t- (7)  Remove a product in your cart" +
+                        "\n\t- (8)  Reset your cart" +
+                        "\n\t- (9)  Place your order" +
+                        "\n\t- (10) Get information about a particular order" +
+                        "\n\t- (11) Get information of all orders made by you" +
+                        "\n\t- (12) Sign out!\n");
                 choice = scanner.nextInt();
                 scanner.nextLine();
                 switch (choice) {
@@ -125,7 +124,7 @@ public class Main {
                             String categoryListingName = scanner.nextLine();
                             System.out.println("Please input the pricing order: asc/des");
                             String listingOrder = scanner.nextLine();
-                            products = Product.listProductsByCategory(categoryListingName, listingOrder, fileCategory);
+                            products = Product.listProductsByCategory(categoryListingName, listingOrder, fileProduct);
                         } else if (choiceInfo.equals("3")) {
                             System.out.println("Please input the category name:");
                             String categoryListingName = scanner.nextLine();
@@ -212,7 +211,7 @@ public class Main {
                             if (productResult == null) {
                                 System.out.printf("There is no product with id %s.\n", productIdFinding);
                             } else {
-                                System.out.printf("The product with id %s is:\n %s\n", productIdFinding, productResult.toString());
+                                System.out.printf("The product with id %s is:\n %s\n", productIdFinding, productResult);
                             }
                         } else if (choiceInfo.equals("2")) {
                             System.out.println("Please input the product name:");
@@ -221,7 +220,7 @@ public class Main {
                             if (productResult == null) {
                                 System.out.printf("There is no product with the name %s\n", productNameFinding);
                             } else {
-                                System.out.printf("The product with the name %s is:\n %s\n", productNameFinding, productResult.toString());
+                                System.out.printf("The product with the name %s is:\n %s\n", productNameFinding, productResult);
                             }
                         } else {
                             break;
@@ -229,7 +228,7 @@ public class Main {
                         System.out.println("Please input the amount of product you want to order!");
                         int amount = scanner.nextInt();
                         scanner.nextLine();
-                        cart.addProduct(productResult, amount);
+                        cart.addProduct(productResult.getId(), amount);
                         System.out.println("Product added to cart!");
                         System.out.println("Your current cart is:");
                         System.out.println(cart);
@@ -296,19 +295,19 @@ public class Main {
                             break;
                         } else {
                             String currentMembership = currentCustomer.getMembership();
-                            long oldTotalSpend = currentCustomer.totalSpend();
-                            double currentDiscount = 0;
+                            double oldTotalSpend = currentCustomer.totalSpend();
+                            double currentDiscount = 1;
                             if (currentMembership.equals("Silver")) {
-                                currentDiscount = 0.05;
+                                currentDiscount -= 0.05;
                             } else if (currentMembership.equals("Gold")) {
-                                currentDiscount = 0.1;
+                                currentDiscount -= 0.1;
                             } else if (currentMembership.equals("Platinum")) {
-                                currentDiscount = 0.15;
+                                currentDiscount -= 0.15;
                             }
                             Order order = new Order (currentCustomer.getId(), cart, currentDiscount);
-                            Method.writeOrderToDatabase(order, fileOrder);
-                            System.out.printf("Your order are placed. The order detail is: %s", order.toString());
-                            long newTotalSpend = currentCustomer.totalSpend();
+                            Order.writeOrderToDatabase(order, fileOrder);
+                            System.out.printf("Your order are placed. The order detail is: %s\n", order.toString());
+                            double newTotalSpend = currentCustomer.totalSpend();
                             if (newTotalSpend >= 25000000 && oldTotalSpend < 25000000) {
                                 System.out.println("You have reach 25.000.000 VND in our store. Congratulations, you are now our Platinum Customer with a discount of 15%!");
                             } else if (newTotalSpend >= 10000000 && oldTotalSpend < 10000000) {
@@ -330,9 +329,7 @@ public class Main {
                             break;
                         }
                         Order orderRequested = Order.findOrderById(orderFindingId, currentCustomer);
-                        if (orderRequested == null) {
-                            System.out.printf("There is no order with id %s. \n", orderFindingId);
-                        } else {
+                        if (!(orderRequested == null)) {
                             System.out.printf("The order with the id %s is: \n%s \n", orderFindingId, orderRequested);
                         }
                         System.out.println("Press enter to come back to main screen");
@@ -342,7 +339,7 @@ public class Main {
                     case 11:
                         System.out.println("Orders will be display as \"Id - Cart - Customer ID - Date - Status - Total price");
                         System.out.println("All orders has been made by you is:");
-                        List<Order> orders = Order.findOrdersByCustomerId(currentCustomer.getId());
+                        List<Order> orders = Order.listOrders(currentCustomer.getId());
                         Method.printOrders(orders);
                         System.out.println("Press enter to come back to main screen");
                         scanner.nextLine();
@@ -369,21 +366,21 @@ public class Main {
                 choice = 0;
 
                 System.out.printf("Please choose the action:" +
-                        "\n\tChoose \"1\" if you want to view lists of customers" +
-                        "\n\tChoose \"2\" if you want to remove a customer" +
-                        "\n\tChoose \"3\" if you want to get information of all orders by a customer" +
-                        "\n\tChoose \"4\" if you want to view lists of products" + // From this, make option to add/remove products, update products
-                        "\n\tChoose \"5\" if you want to add a products" +
-                        "\n\tChoose \"6\" if you want to delete a products" + // by id or by name
-                        "\n\tChoose \"7\" if you want to change the price of a product" +
-                        "\n\tChoose \"8\" if you want to view lists of orders" +
-                        "\n\tChoose \"9\" if you want to change the status of an order" +
-                        "\n\tChoose \"9\" if you want to check the information of all orders executed in a day" +
-                        "\n\tChoose \"10\" if you want to do some statistics operators" +
-                        "\n\tChoose \"11\" if you want to see lists of category" +
-                        "\n\tChoose \"12\" if you want to add a category" +
-                        "\n\tChoose \"13\" if you want to remove a category" +
-                        "\n\tChoose \"14\" if you want to sign out!\n");
+                        "\n\t- (1)  View lists of customers" +
+                        "\n\t- (2)  Remove a customer" +
+                        "\n\t- (3)  Get information of all orders by a customer" +
+                        "\n\t- (4)  View lists of products" + // From this, make option to add/remove products, update products
+                        "\n\t- (5)  Add a products" +
+                        "\n\t- (6)  Delete a products" + // by id or by name
+                        "\n\t- (7)  Change the price of a product" +
+                        "\n\t- (8)  View lists of orders" +
+                        "\n\t- (9)  Change the status of an order" +
+                        "\n\t- (10) Check the information of all orders executed in a day" +
+                        "\n\t- (11) Do some statistics operators" +
+                        "\n\t- (12) See lists of category" +
+                        "\n\t- (13) Add a category" +
+                        "\n\t- (14) Remove a category" +
+                        "\n\t- (15) Sign out!\n");
                 choice = scanner.nextInt();
                 scanner.nextLine();
                 switch (choice) {
@@ -434,7 +431,7 @@ public class Main {
                         String customerIdRequest = scanner.nextLine();
                         System.out.println("Orders will be display as \"Id - Cart - Customer ID - Date - Status - Total price");
                         System.out.printf("All orders has been made by the customer with id %s are:\n", customerIdRequest);
-                        List<Order> orders = Order.findOrdersByCustomerId(customerIdRequest);
+                        List<Order> orders = Order.listOrders(customerIdRequest);
                         Method.printOrders(orders);
                         System.out.println("Press enter to come back to main screen");
                         scanner.nextLine();
@@ -625,7 +622,7 @@ public class Main {
                         int dateCheckDay = scanner.nextInt();
                         scanner.nextLine();
                         LocalDate date = LocalDate.of(dateCheckYear, dateCheckMonth, dateCheckDay);
-                        orders = Order.findOrdersByDate(date);
+                        orders = Order.listOrders(date);
                         System.out.printf("All orders on %s %s, %s is:\n", dateCheckDay, dateCheckMonth, dateCheckYear);
                         Method.printOrders(orders);
                         System.out.println("Press enter to come back to main screen");

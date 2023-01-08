@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.Double.parseDouble;
 import static java.lang.Long.parseLong;
 
 class Customer extends Account {
@@ -13,7 +14,6 @@ class Customer extends Account {
     private String phoneNumber;
     private String address;
     private String email;
-
     private String membership;
 
 
@@ -153,9 +153,9 @@ class Customer extends Account {
         return customers;
     }
 
-    public long totalSpend() throws IOException {
+    public double totalSpend() throws IOException {
         List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\order.txt"));
-        long totalSpend = 0;
+        double totalSpend = 0;
 
         // Find the index of the object with the given id
         for (int i = 0; i < lines.size(); i++) {
@@ -165,9 +165,9 @@ class Customer extends Account {
                 long totalCart = 0;
                 for (int l = 0; l < products.length; l++) {
                     String[] product = products[l].split(";");
-                    totalCart += parseLong(product[1]) * parseLong(product[2]);
+                    totalCart += parseLong(product[2]) * parseLong(product[3]);
                 }
-                totalCart *= parseLong(fields[4]);
+                totalCart *= parseDouble(fields[4]);
                 totalSpend += totalCart;
             }
         }
