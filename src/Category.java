@@ -1,4 +1,4 @@
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,16 +20,93 @@ public class Category {
         this.categoryName = categoryName;
     }
 
+    public static void writeCategoryToDatabase(Category category, String filename) {
+        try {
+            FileWriter fw = new FileWriter(filename, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.append(category.getId() + "," + category.getCategoryName());
+
+            bw.close(); // close the BufferedWriter object
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error writing to database file: " + e.getMessage());
+        }
+    }
+
+    public static boolean ifCategoryExisted(String category) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("E:\\Study\\order-management-system\\Data\\category.txt"));
+            String line;
+            while((line = br.readLine()) != null) {
+                String[] data = line.split(","); // split line by comma delimiter
+
+                if (category.equals(data[1])) {
+                    return true;
+                }
+            }
+            br.close(); // close the BufferedReader object
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
 
     public static void addCategory (String fileName) throws IOException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please input the category's name");
         String categoryName = scanner.nextLine();
-        categoryName = Method.validateCategoryName(categoryName);
+        categoryName = validateCategoryName(categoryName);
 
         Category category = new Category(categoryName);
-        Method.writeCategoryToDatabase(category, fileName);
+        writeCategoryToDatabase(category, fileName);
         System.out.println("Category added successfully!");
+    }
+
+    public static String validateCategoryName(String categoryName) {
+        categoryName = Method.validateEmpty(categoryName);
+        Scanner sc = new Scanner(System.in);
+        do {
+            if (ifCategoryExisted(categoryName)) {
+                System.out.println("Category existed! Please choose another one!");
+                categoryName = sc.nextLine();
+            } else {
+                break;
+            }
+        } while (true);
+        return categoryName;
+    }
+
+    public static String validateCategory(String category, String fileName) throws IOException {
+        Scanner scanner = new Scanner(System.in);
+
+        if (!ifCategoryExisted(category)) {
+            System.out.println("The category you input does not exist in the system. Would you like to add new category (1) or re-input the category (2)? 1/2");
+            int productCase = scanner.nextInt();
+            scanner.nextLine();
+            do {
+                if (productCase != 1 && productCase != 2) {
+                    System.out.println("Please input 1 or 2 only! (1) to add new category and (2) to re-input the category!");
+                    productCase = scanner.nextInt();
+                    scanner.nextLine();
+                } else
+                    break;
+            } while (true);
+            if (productCase == 1) {
+                Category categoryAdd = new Category(category);
+                Category.writeCategoryToDatabase(categoryAdd, fileName);
+                System.out.println("New category added!");
+            } else {
+                System.out.println("Please input the category");
+                category = scanner.nextLine();
+                category = validateCategory(category, fileName);
+            }
+            return category;
+        }
+        return category;
     }
 
     public String getCategoryName() {

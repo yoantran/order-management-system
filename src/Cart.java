@@ -1,21 +1,36 @@
 //https://www.quora.com/How-do-I-add-a-key-value-pair-in-ArrayList-in-Java
 
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Cart {
-    private Map<Product, Integer> products;
+    private Map<String [], Integer> products;
+    private double totalAmount;
 
     public Cart() {
         products = new HashMap<>();
+        totalAmount = 0;
     }
 
-    public void addProduct(Product product, int amount) {
+    public void addProduct(String product, int amount) throws IOException {
         if (products.containsKey(product)) {
             amount += products.get(product);
         }
-        products.put(product, amount);
+        Product newProduct = Product.findProductById(product);
+        String [] productInfo = new String [] {newProduct.getId(), newProduct.getProductName(), String.valueOf(newProduct.getPrice())};
+        products.put(productInfo, amount);
+        totalAmount += newProduct.getPrice() * amount;
+    }
+
+    public void addProduct(String product, int amount, int price, String productName) {
+        if (products.containsKey(product)) {
+            amount += products.get(product);
+        }
+        String [] productInfo = new String [] {product, productName, String.valueOf(price)};
+        products.put(productInfo, amount);
+        totalAmount += price * amount;
     }
 
     public void deleteProduct(Product product) {
@@ -28,41 +43,29 @@ public class Cart {
 
 
 
-//    Cart cart = new Cart();
-//Product product1 = new Product("Product 1", 50, "Category 1");
-//Product product2 = new Product("Product 2", 100, "Category 2");
-//cart.addProduct(product1, 2);
-//cart.addProduct(product2, 3);
-
-//    cart.deleteProduct(product1);
-//    cart.reset();
 
     public double getTotalAmount() {
-        int totalAmount = 0;
-        for (Map.Entry<Product, Integer> entry : products.entrySet()) {
-            Product product = entry.getKey();
-            int amount = entry.getValue();
-            totalAmount += product.getPrice() * amount;
-        }
         return totalAmount;
+    }
+
+    public Map<String[], Integer> getProducts() {
+        return products;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<Product, Integer> entry : products.entrySet()) {
-            Product product = entry.getKey();
+        for (Map.Entry<String[], Integer> entry : products.entrySet()) {
+            String[] productInfo = entry.getKey();
             int amount = entry.getValue();
-            sb.append(product.getId()).append(";").append(product.getPrice()).append(";").append(amount).append("|");
+            sb.append(productInfo[0]).append(";").append(productInfo[1]).append(";")
+                    .append(productInfo[2]).append(";").append(amount).append("|");
         }
         int length = sb.length();
-        sb.deleteCharAt(length - 1);
+        if (length > 0) {
+            sb.deleteCharAt(length - 1);
+        }
         return sb.toString();
     }
-
-
-
-
-
 
 }

@@ -1,3 +1,5 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,9 +43,9 @@ public class Product {
 
         System.out.println("Please input the category of the product");
         String category = scanner.nextLine();
-        category = Method.validateCategory(category,"E:\\Study\\order-management-system\\Data\\category.txt");
+        category = Category.validateCategory(category,"E:\\Study\\order-management-system\\Data\\category.txt");
         Product product = new Product(productName, price, category);
-        Method.writeProductToDatabase(product, fileName);
+        writeProductToDatabase(product, fileName);
         System.out.println("Product added successfully!");
 
     }
@@ -72,6 +74,20 @@ public class Product {
 
     public String getCategory() {
         return category;
+    }
+
+    public static void writeProductToDatabase(Product product, String filename) {
+        try {
+            FileWriter fw = new FileWriter(filename, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            String s = String.valueOf(product.getPrice());
+            bw.append(product.getId()).append(",").append(product.getProductName()).append(",").append(s).append(",").append(product.getCategory()).append("\n");
+
+            bw.close(); // close the BufferedWriter object
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error writing to database file: " + e.getMessage());
+        }
     }
 
     public static void removeProductById (String id) throws IOException {
