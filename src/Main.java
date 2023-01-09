@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
@@ -61,7 +60,7 @@ public class Main {
             while (isLogged) {
                 choice = 0;
 
-                System.out.printf("Please choose the action:" +
+                System.out.print("Please choose the action:" +
                         "\n\t- (1)  Check or update your information" +
                         "\n\t- (2)  Check your current membership status" +
                         "\n\t- (3)  List all products" +
@@ -76,16 +75,17 @@ public class Main {
                         "\n\t- (12) Sign out!\n");
                 choice = scanner.nextInt();
                 scanner.nextLine();
+                label:
                 switch (choice) {
                     case 1:
                         System.out.println("Your current information is:");
                         System.out.println(currentAccount);
-                        System.out.printf("Do you want to change your personal information (including name, phone number, email and your address) or you want to change your password? \nSelect (1) to change your information and (2) for password. \nIf you not wish to change anything ,please press (3).\n");
+                        System.out.print("Do you want to change your personal information (including name, phone number, email and your address) or you want to change your password? \nSelect (1) to change your information and (2) for password. \nIf you not wish to change anything ,please press (3).\n");
                         choiceInfo = scanner.nextLine();
                         if (choiceInfo.equals("1")) {
-                            currentAccount = Method.updateCustomerInformation((Customer) currentAccount);
+                            Method.updateCustomerInformation((Customer) currentAccount);
                         } else if (choiceInfo.equals("2")) {
-                            currentAccount = Method.updatePassword((Customer) currentAccount);
+                            Method.updatePassword((Customer) currentAccount);
                         }
                         System.out.println("Press enter to come back to main screen");
                         scanner.nextLine();
@@ -94,52 +94,66 @@ public class Main {
                     case 2:
                         String membership = currentCustomer.getMembership();
                         System.out.printf("Your current membership is %s.\n", membership);
-                        if (membership.equals("Regular")) {
-                            System.out.println("You don't have any discount.");
-                        } else if (membership.equals("Silver")) {
-                            System.out.println("You have a discount of 5%.");
-                        } else if (membership.equals("Gold")) {
-                            System.out.println("You have a discount of 10%.");
-                        } else if (membership.equals("Platinum")) {
-                            System.out.println("You have a discount of 15%.");
-                        } else {
-                            System.out.println("Invalid membership, please contact the admin for verification!");
-                        };
+                        switch (membership) {
+                            case "Regular":
+                                System.out.println("You don't have any discount.");
+                                break;
+                            case "Silver":
+                                System.out.println("You have a discount of 5%.");
+                                break;
+                            case "Gold":
+                                System.out.println("You have a discount of 10%.");
+                                break;
+                            case "Platinum":
+                                System.out.println("You have a discount of 15%.");
+                                break;
+                            default:
+                                System.out.println("Invalid membership, please contact the admin for verification!");
+                                break;
+                        }
+
                         System.out.println("Press enter to come back to main screen");
                         scanner.nextLine();
                         System.out.println("Coming back to main screen...");
 
                         break;
                     case 3:
-                        System.out.printf("Do you want to\n\t- (1) List all products\n\t- (2) List all products in a category with pricing order (asc or des)" +
+                        System.out.print("Do you want to\n\t- (1) List all products\n\t- (2) List all products in a category with pricing order (asc or des)" +
                                 "\n\t- (3) List all products in a category with a price range" +
                                 "\n\t- (4) Go back to main menu.\n");
                         choiceInfo = scanner.nextLine();
 
-                        List<Product> products = null;
-                        if (choiceInfo.equals("1")) {
-                            products = Product.listProducts();
-                        } else if (choiceInfo.equals("2")) {
-                            System.out.println("Please input the category name:");
-                            String categoryListingName = scanner.nextLine();
-                            System.out.println("Please input the pricing order: asc/des");
-                            String listingOrder = scanner.nextLine();
-                            products = Product.listProductsByCategory(categoryListingName, listingOrder, fileProduct);
-                        } else if (choiceInfo.equals("3")) {
-                            System.out.println("Please input the category name:");
-                            String categoryListingName = scanner.nextLine();
-                            System.out.println("Please input the min price:");
-                            int minListingPrice = scanner.nextInt();
-                            scanner.nextLine();
-                            System.out.println("Please input the max price:");
-                            int maxListingPrice = scanner.nextInt();
-                            scanner.nextLine();
-                            products = Product.listProductsInPriceRangeAndCategory(minListingPrice, maxListingPrice, categoryListingName);
-                        } else {
-                            System.out.println("CComing back to main screen...");
-                            break;
-                        };
-                        if (products.equals("")) {
+                        List<Product> products;
+                        switch (choiceInfo) {
+                            case "1":
+                                products = Product.listProducts();
+                                break;
+                            case "2": {
+                                System.out.println("Please input the category name:");
+                                String categoryListingName = scanner.nextLine();
+                                System.out.println("Please input the pricing order: asc/des");
+                                String listingOrder = scanner.nextLine();
+                                products = Product.listProductsByCategory(categoryListingName, listingOrder, fileProduct);
+                                break;
+                            }
+                            case "3": {
+                                System.out.println("Please input the category name:");
+                                String categoryListingName = scanner.nextLine();
+                                System.out.println("Please input the min price:");
+                                int minListingPrice = scanner.nextInt();
+                                scanner.nextLine();
+                                System.out.println("Please input the max price:");
+                                int maxListingPrice = scanner.nextInt();
+                                scanner.nextLine();
+                                products = Product.listProductsInPriceRangeAndCategory(minListingPrice, maxListingPrice, categoryListingName);
+                                break;
+                            }
+                            default:
+                                System.out.println("Coming back to main screen...");
+                                break label;
+                        }
+
+                        if (products.isEmpty()) {
                             System.out.println("No products found, please re-check the category or your pricing condition!");
                         } else {
                             System.out.println("All products listing...");
@@ -168,7 +182,7 @@ public class Main {
                             if (productResult == null) {
                                 System.out.printf("There is no product with id %s.\n", productIdFinding);
                             } else {
-                                System.out.printf("The product with id %s is:\n %s\n", productIdFinding, productResult.toString());
+                                System.out.printf("The product with id %s is:\n %s\n", productIdFinding, productResult);
                             }
                         } else if (choiceInfo.equals("2")) {
                             System.out.println("Please input the product name:");
@@ -177,7 +191,7 @@ public class Main {
                             if (productResult == null) {
                                 System.out.printf("There is no product with the name %s\n", productNameFinding);
                             } else {
-                                System.out.printf("The product with the name %s is:\n %s\n", productNameFinding, productResult.toString());
+                                System.out.printf("The product with the name %s is:\n %s\n", productNameFinding, productResult);
                             }
                         } else {
                             break;
@@ -195,7 +209,7 @@ public class Main {
                             System.out.println(cart);
                             System.out.println("The total price of your cart is:");
                             System.out.println(cart.getTotalAmount());
-                        };
+                        }
                         System.out.println("Press enter to come back to main screen");
                         scanner.nextLine();
                         System.out.println("Coming back to main screen...");
@@ -228,6 +242,7 @@ public class Main {
                         System.out.println("Please input the amount of product you want to order!");
                         int amount = scanner.nextInt();
                         scanner.nextLine();
+                        assert productResult != null;
                         cart.addProduct(productResult.getId(), amount);
                         System.out.println("Product added to cart!");
                         System.out.println("Your current cart is:");
@@ -250,7 +265,7 @@ public class Main {
                             if (productRemoveResult == null) {
                                 System.out.printf("There is no product with id %s.\n", productIdFinding);
                             } else {
-                                System.out.printf("The product with id %s is:\n %s\n", productIdFinding, productRemoveResult.toString());
+                                System.out.printf("The product with id %s is:\n %s\n", productIdFinding, productRemoveResult);
                             }
                         } else if (choiceInfo.equals("2")) {
                             System.out.println("Please input the product name:");
@@ -259,7 +274,7 @@ public class Main {
                             if (productRemoveResult == null) {
                                 System.out.printf("There is no product with the name %s\n", productNameFinding);
                             } else {
-                                System.out.printf("The product with the name %s is:\n %s\n", productNameFinding, productRemoveResult.toString());
+                                System.out.printf("The product with the name %s is:\n %s\n", productNameFinding, productRemoveResult);
                             }
                         } else {
                             break;
@@ -297,12 +312,16 @@ public class Main {
                             String currentMembership = currentCustomer.getMembership();
                             double oldTotalSpend = currentCustomer.totalSpend();
                             double currentDiscount = 1;
-                            if (currentMembership.equals("Silver")) {
-                                currentDiscount -= 0.05;
-                            } else if (currentMembership.equals("Gold")) {
-                                currentDiscount -= 0.1;
-                            } else if (currentMembership.equals("Platinum")) {
-                                currentDiscount -= 0.15;
+                            switch (currentMembership) {
+                                case "Silver":
+                                    currentDiscount -= 0.05;
+                                    break;
+                                case "Gold":
+                                    currentDiscount -= 0.1;
+                                    break;
+                                case "Platinum":
+                                    currentDiscount -= 0.15;
+                                    break;
                             }
                             Order order = new Order (currentCustomer.getId(), cart, currentDiscount);
                             Order.writeOrderToDatabase(order, fileOrder);
@@ -370,7 +389,7 @@ public class Main {
             while (isLoggedAdmin) {
                 choice = 0;
 
-                System.out.printf("Please choose the action:" +
+                System.out.print("Please choose the action:" +
                         "\n\t- (1)  View lists of customers" +
                         "\n\t- (2)  Remove a customer" +
                         "\n\t- (3)  Get information of all orders by a customer" +
@@ -448,7 +467,7 @@ public class Main {
                         System.out.println("Coming back to main screen... ");
                         break;
                     case 4:
-                        System.out.printf("Do you want to\n\t- (1) List all products\n\t- (2) List all products in a category with pricing order (asc or des)" +
+                        System.out.print("Do you want to\n\t- (1) List all products\n\t- (2) List all products in a category with pricing order (asc or des)" +
                                 "\n\t- (3) List all products in a category with a price range" +
                                 "\n\t- (4) Go back to main menu.\n");
                         choiceInfo = scanner.nextLine();
@@ -475,7 +494,7 @@ public class Main {
                         } else {
                             System.out.println("CComing back to main screen...");
                             break;
-                        };
+                        }
                         if (products.equals("")) {
                             System.out.println("No products found, please re-check the category or your pricing condition!");
                         } else {
