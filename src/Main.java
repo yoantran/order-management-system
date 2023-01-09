@@ -83,9 +83,9 @@ public class Main {
                         System.out.print("Do you want to change your personal information (including name, phone number, email and your address) or you want to change your password? \nSelect (1) to change your information and (2) for password. \nIf you not wish to change anything ,please press (3).\n");
                         choiceInfo = scanner.nextLine();
                         if (choiceInfo.equals("1")) {
-                            Method.updateCustomerInformation((Customer) currentAccount);
+                            Customer.updateCustomerInformation((Customer) currentAccount);
                         } else if (choiceInfo.equals("2")) {
-                            Method.updatePassword((Customer) currentAccount);
+                            Customer.updatePassword((Customer) currentAccount);
                         }
                         System.out.println("Press enter to come back to main screen");
                         scanner.nextLine();

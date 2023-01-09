@@ -10,16 +10,6 @@ class Admin extends Account {
     }
 
 
-
-
-
-
-
-
-
-
-
-
     public static double calculateTotalRevenue(List<Order> orders) {
         double totalRevenue = 0;
         for (Order order : orders) {
