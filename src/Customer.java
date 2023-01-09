@@ -153,6 +153,23 @@ class Customer extends Account {
         return customers;
     }
 
+    public static Customer findCustomerById(String customerId) throws IOException, NoSuchAlgorithmException {
+        // Read the category data from the text file
+        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\account.txt"));
+
+        // Parse the lines into a list of Category objects
+        Customer customer = null;
+        for (String line : lines) {
+            String[] fields = line.split(",");
+            if (customerId.equals(fields[0])) {
+                customer = new Customer(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6], fields[7]);
+            }
+
+        }
+
+        return customer;
+    }
+
     public double totalSpend() throws IOException {
         List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\order.txt"));
         double totalSpend = 0;

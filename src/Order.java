@@ -1,14 +1,9 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Order {
@@ -48,13 +43,6 @@ public class Order {
         this.status = status;
     }
 
-    public static void placeOrder(String fileName, Order order) {
-        writeOrderToDatabase(order, fileName);
-        System.out.println("Order placed!");
-    }
-
-
-
     public String getId() {
         return id;
     }
@@ -75,9 +63,6 @@ public class Order {
         return status;
     }
 
-    public void setStatusDone() {
-        this.status = "Done";
-    }
 
     public double getDiscount() {
         return discount;
@@ -117,91 +102,138 @@ public class Order {
     }
 
 
-    public static List<Order> listOrders(String customerId) throws IOException, ParseException {
-        // Read the order data from the text file
-        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\order.txt"));
-
-        // Find the orders made by the customer with the given id
+    public static List<Order> listOrders(String customerId, String fileName) throws FileException {
+        // Create a list to store the orders
         List<Order> orders = new ArrayList<>();
-        for (String line : lines) {
-            String[] fields = line.split(",");
-            if (customerId.equals(fields[1])) {
+
+        // Read the order data from the text file using a BufferedReader
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] fields = line.split(",");
+                // Check if the customer ID matches the given customer ID
+                if (customerId.equals(fields[1])) {
+                    // Parse the date field
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate orderDateTime = LocalDate.parse(fields[3], formatter);
+
+                    Cart cart = new Cart();
+                    // Find the cart and customer objects
+                    String[] products = fields[2].split("\\|");
+                    for (int l = 0; l < products.length; l++) {
+                        String[] product = products[l].split(";");
+                        cart.addProduct(product[0], Integer.parseInt(product[3]), Integer.parseInt(product[2]), product[1]);
+
+                    }
+
+                    orders.add(new Order(fields[0], fields[1], cart, orderDateTime, Double.parseDouble(fields[4]), fields[5]));
+                }
+            }
+        } catch (IOException e) {
+            throw new FileException("An error occurred while reading the file: " + e.getMessage());
+        }
+
+        return orders;
+    }
+
+    public static List<Order> listOrders() throws FileException {
+        // Create a list to store the orders
+        List<Order> orders = new ArrayList<>();
+
+        // Read the order data from the text file using a BufferedReader
+        try (BufferedReader reader = new BufferedReader(new FileReader("E:\\Study\\order-management-system\\Data\\order.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] fields = line.split(",");
                 // Parse the date field
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 LocalDate orderDateTime = LocalDate.parse(fields[3], formatter);
 
-                Cart cart = new Cart();
                 // Find the cart and customer objects
+                Cart cart = new Cart();
                 String[] products = fields[2].split("\\|");
                 for (int l = 0; l < products.length; l++) {
                     String[] product = products[l].split(";");
                     cart.addProduct(product[0], Integer.parseInt(product[3]), Integer.parseInt(product[2]), product[1]);
-
                 }
 
                 orders.add(new Order(fields[0], fields[1], cart, orderDateTime, Double.parseDouble(fields[4]), fields[5]));
             }
+        } catch (IOException e) {
+            throw new FileException("An error occurred while reading the file: " + e.getMessage());
         }
 
         return orders;
     }
 
-    public static List<Order> listOrders() throws IOException, ParseException {
-        // Read the order data from the text file
-        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\order.txt"));
-
-        // Parse the lines into a list of Order objects
+    public static List<Order> listOrders(LocalDate date) throws FileException {
         List<Order> orders = new ArrayList<>();
-        for (String line : lines) {
-            String[] fields = line.split(",");
-            // Parse the date field
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate orderDateTime = LocalDate.parse(fields[3], formatter);
+        String filePath = "E:\\Study\\order-management-system\\Data\\order.txt";
 
-            // Find the cart and customer objects
-            Cart cart = new Cart();
-            // Find the cart and customer objects
-            String[] products = fields[2].split("\\|");
-            for (int l = 0; l < products.length; l++) {
-                String[] product = products[l].split(";");
-                cart.addProduct(product[0], Integer.parseInt(product[3]), Integer.parseInt(product[2]), product[1]);
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] fields = line.split(",");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate orderDateTime = LocalDate.parse(fields[3], formatter);
 
+                if (date.equals(orderDateTime)) {
+                    Cart cart = new Cart();
+                    String[] products = fields[2].split("\\|");
+                    for (int l = 0; l < products.length; l++) {
+                        String[] product = products[l].split(";");
+                        cart.addProduct(product[0], Integer.parseInt(product[3]), Integer.parseInt(product[2]), product[1]);
+                    }
+                    orders.add(new Order(fields[0], fields[1], cart, orderDateTime, Double.parseDouble(fields[4]), fields[5]));
+                }
             }
-            orders.add(new Order(fields[0], fields[1], cart, orderDateTime, Double.parseDouble(fields[4]), fields[5]));
-
+        } catch (IOException e) {
+            throw new FileException("An error occurred while reading the file: " + e.getMessage());
         }
 
         return orders;
     }
 
-    public static List<Order> listOrders(LocalDate date) throws IOException {
-        // Read the order data from the text file
-        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\order.txt"));
+    public static void changeOrderStatus(String orderId, String status, String fileName) throws FileException {
+        // Create a list to store the lines from the file
+        List<String> lines = new ArrayList<>();
 
-        // Parse the lines into a list of Order objects
-        List<Order> orders = new ArrayList<>();
+        // Read the lines from the file using a BufferedReader
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            throw new FileException("An error occurred while reading the file: " + e.getMessage());
+        }
+
+        // Create a new list to store the modified lines
+        List<String> modifiedLines = new ArrayList<>();
+
+        // Find the order with the given id and update its status
         for (String line : lines) {
             String[] fields = line.split(",");
-            // Parse the date field
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate orderDateTime = LocalDate.parse(fields[3], formatter);
-
-            // Only add the order if it was made on the specified date
-            if (date.equals(orderDateTime)) {
-                // Find the cart and customer objects
-                Cart cart = new Cart();
-                // Find the cart and customer objects
-                String[] products = fields[2].split("\\|");
-                for (int l = 0; l < products.length; l++) {
-                    String[] product = products[l].split(";");
-                    cart.addProduct(product[0], Integer.parseInt(product[3]), Integer.parseInt(product[2]), product[1]);
-
-                }
-                orders.add(new Order(fields[0], fields[1], cart, orderDateTime, Double.parseDouble(fields[4]), fields[5]));
+            if (orderId.equals(fields[0])) {
+                // Update the status field
+                fields[5] = status;
+                // Concatenate the fields back into a single line and add it to the modified lines list
+                modifiedLines.add(String.join(",", fields));
+            } else {
+                // Add the original line to the modified lines list
+                modifiedLines.add(line);
             }
         }
 
-        return orders;
+        // Write the modified lines to the file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            for (String modifiedLine : modifiedLines) {
+                writer.write(modifiedLine);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            throw new FileException("An error occurred while writing to the file: " + e.getMessage());
+        }
     }
 
     public static void writeOrderToDatabase(Order order, String filename) {

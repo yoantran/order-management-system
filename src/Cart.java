@@ -3,7 +3,6 @@
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Cart {
@@ -47,6 +46,10 @@ public class Cart {
 
     public double getTotalAmount() {
         return totalAmount;
+    }
+
+    public Map<String[], Integer> getProducts() {
+        return products;
     }
 
     @Override

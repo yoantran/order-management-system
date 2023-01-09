@@ -3,12 +3,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
-import static java.lang.Long.parseLong;
 
 public class Method {
 //
@@ -71,7 +69,6 @@ public class Method {
                     System.out.println("Username existed! Please choose another one!");
                     return true;
                 }
-                // do something with the user object
             }
             br.close(); // close the BufferedReader object
 
@@ -123,11 +120,11 @@ public class Method {
     public static String generateID(String id, String fileName) throws IOException {
         int amount = readList(fileName);
         if (amount <= 0) {
-            return id + Integer.toString(01);
+            return id + (1);
         }
         else {
             amount ++;
-            return id + Integer.toString(amount);
+            return id + (amount);
         }
     }
 

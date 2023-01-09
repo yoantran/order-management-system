@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 
 public class Main {
-    public static void main(String[] args) throws IOException, NoSuchAlgorithmException, ParseException {
+    public static void main(String[] args) throws IOException, NoSuchAlgorithmException{
 
         Scanner scanner = new Scanner(System.in);
         String fileAccount = "E:\\Study\\order-management-system\\Data\\account.txt";
@@ -45,7 +45,7 @@ public class Main {
                     currentAccount = Account.login(fileAccount, username, password);
                     if (currentAccount != null) {
                         if (currentAccount.isAdmin()) {
-                            System.out.printf("Admin logged in, welcome to Order Management System\n");
+                            System.out.println("Admin logged in, welcome to Order Management System");
                             isLoggedAdmin = true;
                         } else if (!currentAccount.isAdmin()) {
                             currentCustomer = (Customer) currentAccount;
@@ -339,7 +339,12 @@ public class Main {
                     case 11:
                         System.out.println("Orders will be display as \"Id - Cart - Customer ID - Date - Status - Total price");
                         System.out.println("All orders has been made by you is:");
-                        List<Order> orders = Order.listOrders(currentCustomer.getId());
+                        List<Order> orders = null;
+                        try {
+                            orders = Order.listOrders(currentCustomer.getId(), fileOrder);;
+                        } catch (FileException e) {
+                            System.out.println(e.getMessage());
+                        }
                         Method.printOrders(orders);
                         System.out.println("Press enter to come back to main screen");
                         scanner.nextLine();
@@ -431,7 +436,12 @@ public class Main {
                         String customerIdRequest = scanner.nextLine();
                         System.out.println("Orders will be display as \"Id - Cart - Customer ID - Date - Status - Total price");
                         System.out.printf("All orders has been made by the customer with id %s are:\n", customerIdRequest);
-                        List<Order> orders = Order.listOrders(customerIdRequest);
+                        List<Order> orders = null;
+                        try {
+                            orders = Order.listOrders(customerIdRequest, fileOrder);
+                        } catch (FileException e) {
+                            System.out.println(e.getMessage());
+                        }
                         Method.printOrders(orders);
                         System.out.println("Press enter to come back to main screen");
                         scanner.nextLine();
@@ -605,13 +615,45 @@ public class Main {
                         break;
                     case 8:
                         System.out.println("List of orders:");
-                        orders = Order.listOrders();
-                        Method.printOrders(orders);
+                        try {
+                            // Call the listOrders method
+                            orders = Order.listOrders();
+
+                            // Print the list of orders to the console
+                            Method.printOrders(orders);
+
+                        } catch (FileException e) {
+                            System.out.println(e.getMessage());
+                        }
                         System.out.println("Press enter to come back to main screen");
                         scanner.nextLine();
                         System.out.println("Coming back to main screen... ");
                         break;
                     case 9:
+//                        Change the status of an order
+                        System.out.println("Please input the order ID to change status:");
+                        String orderID = scanner.nextLine();
+                        try {
+                            // Check if the order ID is in the correct format
+                            if (!orderID.matches("O\\d+")) {
+                                throw new IllegalArgumentException("Invalid order ID format");
+                            }
+
+                            try {
+                                Order.changeOrderStatus(orderID, "PAID", fileOrder);
+                            } catch (FileException e) {
+                                System.out.println(e.getMessage());
+                            }
+
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(e.getMessage());
+                        }
+                        System.out.printf("Order with id %s was approved! The status has been changed to \"PAID\"\n", orderID);
+                        System.out.println("Press enter to come back to main screen");
+                        scanner.nextLine();
+                        System.out.println("Coming back to main screen... ");
+                        break;
+                    case 10:
                         System.out.println("Please input the year:");
                         int dateCheckYear = scanner.nextInt();
                         scanner.nextLine();
@@ -622,16 +664,109 @@ public class Main {
                         int dateCheckDay = scanner.nextInt();
                         scanner.nextLine();
                         LocalDate date = LocalDate.of(dateCheckYear, dateCheckMonth, dateCheckDay);
-                        orders = Order.listOrders(date);
-                        System.out.printf("All orders on %s %s, %s is:\n", dateCheckDay, dateCheckMonth, dateCheckYear);
-                        Method.printOrders(orders);
+                        try {
+                            orders = Order.listOrders(date);  // Get the list of orders for the specified date
+                            System.out.printf("All orders on %s %s, %s is:\n", dateCheckDay, dateCheckMonth, dateCheckYear);
+                            Method.printOrders(orders);
+                        } catch (FileException e) {
+                            System.out.println("Error: " + e.getMessage());
+                            return;
+                        }
                         System.out.println("Press enter to come back to main screen");
                         scanner.nextLine();
                         System.out.println("Coming back to main screen... ");
                         break;
-                    case 10:
-                        break;
                     case 11:
+                        System.out.printf("This is the admin Dashboard. Do you want to" +
+                                "\n\t (1) Calculate the store total revenue" +
+                                "\n\t (2) Calculate the store revenue on a day" +
+                                "\n\t (3) Name the current most popular product" +
+                                "\n\t (4) Name the current least popular product" +
+                                "\n\t (5) Name the customer pays the most in the store" +
+                                "\n\t (6) List out the numbers of different types of membership" +
+                                "\n\t (7) Back to main menu\n");
+                        changeChoice = scanner.nextLine();
+                        if (changeChoice.equals("1")) {
+                            // Calculate the store total revenue
+                            try {
+                                // Call the listOrders method
+                                orders = Order.listOrders();
+                                double totalRevenue = Admin.calculateTotalRevenue(orders);
+                                System.out.printf("The store total revenue is %.2f\n", totalRevenue);
+
+                            } catch (FileException e) {
+                                System.out.println(e.getMessage());
+                            }
+                        } else if (changeChoice.equals("2")) {
+                            // Calculate the store revenue on a day
+
+                            System.out.println("Please input the year:");
+                            dateCheckYear = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.println("Please input the month:");
+                            dateCheckMonth = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.println("Please input the day:");
+                            dateCheckDay = scanner.nextInt();
+                            scanner.nextLine();
+                            date = LocalDate.of(dateCheckYear, dateCheckMonth, dateCheckDay);
+                            try {
+                                orders = Order.listOrders(date);  // Get the list of orders for the specified date
+                                double totalRevenue = Admin.calculateTotalRevenue(orders);
+                                System.out.printf("The store total revenue on %s/%s/%s is %.2f\n",dateCheckDay, dateCheckMonth, dateCheckYear, totalRevenue);
+                            } catch (FileException e) {
+                                System.out.println("Error: " + e.getMessage());
+                                return;
+                            }
+
+                        } else if (changeChoice.equals("3")) {
+                            // Name the current most popular product
+                            try {
+                                // Call the listOrders method
+                                orders = Order.listOrders();
+                                Admin.findMostPopularProduct(orders);
+
+                            } catch (FileException e) {
+                                System.out.println(e.getMessage());
+                            }
+
+                        } else if (changeChoice.equals("4")) {
+                            // Name the current least popular product
+
+                            try {
+                                // Call the listOrders method
+                                orders = Order.listOrders();
+                                Admin.findLeastPopularProduct(orders);
+
+                            } catch (FileException e) {
+                                System.out.println(e.getMessage());
+                            }
+                        } else if (changeChoice.equals("5")) {
+                            // Name the customer pays the most in the store
+                            try {
+                                // Call the listOrders method
+                                orders = Order.listOrders();
+                                Admin.findBiggestSpender(orders);
+
+                            } catch (FileException e) {
+                                System.out.println(e.getMessage());
+                            }
+                        } else if (changeChoice.equals("6")) {
+                            // List out the numbers of different types of membership
+                            customers = Customer.listCustomers();
+                            Admin.countMembership(customers);
+
+                        } else {
+                            System.out.println("Thank you!");
+                        }
+
+                        System.out.println("Press enter to come back to main screen");
+                        scanner.nextLine();
+                        System.out.println("Coming back to main screen... ");
+                        break;
+
+
+                    case 12:
                         System.out.println("List of all categories is presents as \"ID - Name\"");
                         List<Category> categories = Category.listCategories();
                         for (Category category : categories) {
@@ -641,12 +776,12 @@ public class Main {
                         scanner.nextLine();
                         System.out.println("Coming back to main screen... ");
                         break;
-                    case 12:
+                    case 13:
                         Category.addCategory(fileCategory);
                         System.out.println("Press enter to come back to main screen");
                         System.out.println("Coming back to main screen... ");
                         break;
-                    case 13:
+                    case 14:
                         System.out.println("Please input the name of the category");
                         String categoryNameRequest = scanner.nextLine();
                         Category.removeCategoryByName(categoryNameRequest);
@@ -654,7 +789,7 @@ public class Main {
                         System.out.println("Press enter to come back to main screen");
                         System.out.println("Coming back to main screen... ");
                         break;
-                    case 14:
+                    case 15:
                         System.out.println("Do you want to sign out? yes/no");
                         String signOutCheck = scanner.nextLine();
                         if (signOutCheck.equals("yes")) {
