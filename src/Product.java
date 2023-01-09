@@ -16,8 +16,11 @@ public class Product {
     private int price;
     private String category;
 
+    private static final String  fileName = ".\\Data\\products.txt";
+
+
     public Product(String productName, int price, String category) throws IOException {
-        this.id = Method.generateID("P", "E:\\Study\\order-management-system\\Data\\products.txt");
+        this.id = Method.generateID("P", fileName);
         this.productName = productName;
         setPrice(price);
         this.category = category;
@@ -29,6 +32,8 @@ public class Product {
         this.price = price;
         this.category = category;
     }
+
+
 
     public static void addProduct(String fileName) throws IOException {
         Scanner scanner = new Scanner(System.in);
@@ -43,7 +48,7 @@ public class Product {
 
         System.out.println("Please input the category of the product");
         String category = scanner.nextLine();
-        category = Category.validateCategory(category,"E:\\Study\\order-management-system\\Data\\category.txt");
+        category = Category.validateCategory(category,fileName);
         Product product = new Product(productName, price, category);
         writeProductToDatabase(product, fileName);
         System.out.println("Product added successfully!");
@@ -91,16 +96,16 @@ public class Product {
     }
 
     public static void removeProductById (String id) throws IOException {
-        Method.removeById(id, "E:\\Study\\order-management-system\\Data\\products.txt");
+        Method.removeById(id, fileName);
     }
 
     public static void removeProductByName (String name) throws IOException {
-        Method.removeByName(name, "E:\\Study\\order-management-system\\Data\\products.txt");
+        Method.removeByName(name, fileName);
     }
 
     public static List<Product> listProducts() throws IOException {
         // Read the category data from the text file
-        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\products.txt"));
+        List<String> lines = Files.readAllLines(Paths.get(fileName));
 
         // Parse the lines into a list of Category objects
         List<Product> products = new ArrayList<>();
@@ -149,7 +154,7 @@ public class Product {
 
     public static List<Product> listProductsInPriceRangeAndCategory(int minPrice, int maxPrice, String category) throws IOException {
         // Read the product data from the text file
-        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\products.txt"));
+        List<String> lines = Files.readAllLines(Paths.get(fileName));
 
         // Parse the lines into a list of Product objects
         List<Product> products = new ArrayList<>();
@@ -175,7 +180,7 @@ public class Product {
 //}
     public static Product findProductById(String id) throws IOException {
         // Read the product data from the text file
-        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\products.txt"));
+        List<String> lines = Files.readAllLines(Paths.get(fileName));
 
         // Find the product with the given id
         for (String line : lines) {
@@ -190,7 +195,7 @@ public class Product {
 
     public static Product findProductByName(String name) throws IOException {
         // Read the product data from the text file
-        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\products.txt"));
+        List<String> lines = Files.readAllLines(Paths.get(fileName));
 
         // Find the product with the given name
         for (String line : lines) {
@@ -205,7 +210,7 @@ public class Product {
 
     public static void changePriceById(String id, int newPrice) throws IOException {
         // Read the product data from the text file
-        Path path = Paths.get("E:\\Study\\order-management-system\\Data\\products.txt");
+        Path path = Paths.get(fileName);
         List<String> lines = Files.readAllLines(path);
 
         // Find the product with the given id and update its price
@@ -225,7 +230,7 @@ public class Product {
 
     public static void changePriceByName(String name, int newPrice) throws IOException {
         // Read the product data from the text file
-        Path path = Paths.get("E:\\Study\\order-management-system\\Data\\products.txt");
+        Path path = Paths.get(fileName);
         List<String> lines = Files.readAllLines(path);
 
         // Find the product with the given id and update its price

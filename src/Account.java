@@ -50,7 +50,7 @@ abstract class Account {
         Account account = null;
 
 //        Check if admin
-       BufferedReader reader = new BufferedReader(new FileReader("E:\\Study\\order-management-system\\Data\\admin.txt"));
+       BufferedReader reader = new BufferedReader(new FileReader(".\\Data\\admin.txt"));
        String[] adminAccount = reader.readLine().split(",");
        if (username.equals(adminAccount[1]) && password.equals(adminAccount[2])) {
            account = new Admin(adminAccount[0], adminAccount[1],adminAccount[2]);

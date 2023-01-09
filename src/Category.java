@@ -12,13 +12,15 @@ public class Category {
 
     public Category(String categoryName) throws IOException {
         setCategoryName(categoryName);
-        this.id = Method.generateID("G", "E:\\Study\\order-management-system\\Data\\category.txt");
+        this.id = Method.generateID("G", ".\\Data\\category.txt");
     }
 
     public Category(String id, String categoryName) {
         this.id = id;
         this.categoryName = categoryName;
     }
+
+    private static final String  fileName = ".\\Data\\category.txt";
 
     public static void writeCategoryToDatabase(Category category, String filename) {
         try {
@@ -35,7 +37,7 @@ public class Category {
 
     public static boolean ifCategoryExisted(String category) {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("E:\\Study\\order-management-system\\Data\\category.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
             String line;
             while((line = br.readLine()) != null) {
                 String[] data = line.split(","); // split line by comma delimiter
@@ -126,17 +128,17 @@ public class Category {
     }
 
     public static void removeCategoryById (String id) throws IOException {
-        Method.removeById(id, "E:\\Study\\order-management-system\\Data\\category.txt");
+        Method.removeById(id, fileName);
     }
 
     public static void removeCategoryByName (String name) throws IOException {
-        Method.removeByName(name, "E:\\Study\\order-management-system\\Data\\category.txt");
+        Method.removeByName(name, fileName);
         replaceCategory(name, "None");
     }
 
     public static void replaceCategory(String oldCategory, String newCategory) throws IOException {
         // Read the product data from the text file
-        Path path = Paths.get("E:\\Study\\order-management-system\\Data\\products.txt");
+        Path path = Paths.get(fileName);
         List<String> lines = Files.readAllLines(path);
 
         // Replace the category name in each line
@@ -154,7 +156,7 @@ public class Category {
 
     public static List<Category> listCategories() throws IOException {
         // Read the category data from the text file
-        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\category.txt"));
+        List<String> lines = Files.readAllLines(Paths.get(fileName));
 
         // Parse the lines into a list of Category objects
         List<Category> categories = new ArrayList<>();
