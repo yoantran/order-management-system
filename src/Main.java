@@ -9,10 +9,10 @@ public class Main {
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException{
 
         Scanner scanner = new Scanner(System.in);
-        String fileAccount = "E:\\Study\\order-management-system\\Data\\account.txt";
-        String fileCategory = "E:\\Study\\order-management-system\\Data\\category.txt";
-        String fileOrder = "E:\\Study\\order-management-system\\Data\\order.txt";
-        String fileProduct = "E:\\Study\\order-management-system\\Data\\products.txt";
+        String fileAccount = ".\\Data\\account.txt";
+        String fileCategory = ".\\Data\\category.txt";
+        String fileOrder = ".\\Data\\order.txt";
+        String fileProduct = ".\\Data\\products.txt";
         Account currentAccount = null;
         Customer currentCustomer = null;
         Cart cart = new Cart();

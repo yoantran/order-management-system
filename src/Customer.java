@@ -17,6 +17,8 @@ class Customer extends Account {
     private String email;
     private String membership;
 
+    private static final String  fileName = ".\\Data\\account.txt";
+
 
 
 
@@ -47,7 +49,7 @@ class Customer extends Account {
         String username = scanner.nextLine();
         Scanner sc = new Scanner(System.in);
         do {
-            if (ifUsernameExisted("E:\\Study\\order-management-system\\Data\\account.txt", username)) {
+            if (ifUsernameExisted(fileName, username)) {
                 username = sc.nextLine();
             } else {
                 break;
@@ -117,7 +119,7 @@ class Customer extends Account {
         String newEmail = sc.nextLine();
         customer.setEmail(newEmail);
 
-        Path path = Paths.get("E:\\Study\\order-management-system\\Data\\account.txt");
+        Path path = Paths.get(fileName);
         List<String> lines = Files.readAllLines(path);
 
         // Replace the customer information if it reaches the id
@@ -146,7 +148,7 @@ class Customer extends Account {
         System.out.printf("Please input your old password\n", customer.getFullName());
         String oldPassword = sc.nextLine();
 
-        Path path = Paths.get("E:\\Study\\order-management-system\\Data\\account.txt");
+        Path path = Paths.get(fileName);
         List<String> lines = Files.readAllLines(path);
 
         // Replace the customer information if it reaches the id
@@ -253,7 +255,7 @@ class Customer extends Account {
 
     public static List<Customer> listCustomers() throws IOException, NoSuchAlgorithmException {
         // Read the category data from the text file
-        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\account.txt"));
+        List<String> lines = Files.readAllLines(Paths.get(fileName));
 
         // Parse the lines into a list of Category objects
         List<Customer> customers = new ArrayList<>();
@@ -267,7 +269,7 @@ class Customer extends Account {
 
     public static Customer findCustomerById(String customerId) throws IOException, NoSuchAlgorithmException {
         // Read the category data from the text file
-        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\account.txt"));
+        List<String> lines = Files.readAllLines(Paths.get(fileName));
 
         // Parse the lines into a list of Category objects
         Customer customer = null;
@@ -283,7 +285,7 @@ class Customer extends Account {
     }
 
     public double totalSpend() throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\order.txt"));
+        List<String> lines = Files.readAllLines(Paths.get(fileName));
         double totalSpend = 0;
 
         // Find the index of the object with the given id

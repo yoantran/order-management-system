@@ -15,8 +15,11 @@ public class Order {
     private final double discount;
     private String status;
 
+    private static final String  fileName = ".\\Data\\order.txt";
+
+
     public Order(String customer, Cart cart, double discount) throws IOException {
-        this.id = Method.generateID("O", "E:\\Study\\order-management-system\\Data\\order.txt");
+        this.id = Method.generateID("O", fileName);
         this.customer = customer;
         this.cart = cart;
         this.dateTime = LocalDate.now();
@@ -73,7 +76,7 @@ public class Order {
 
 
         // Read the order data from the text file
-        List<String> lines = Files.readAllLines(Paths.get("E:\\Study\\order-management-system\\Data\\order.txt"));
+        List<String> lines = Files.readAllLines(Paths.get(fileName));
 
         // Find the order with the given id
         for (String line : lines) {
@@ -141,7 +144,7 @@ public class Order {
         List<Order> orders = new ArrayList<>();
 
         // Read the order data from the text file using a BufferedReader
-        try (BufferedReader reader = new BufferedReader(new FileReader("E:\\Study\\order-management-system\\Data\\order.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] fields = line.split(",");
@@ -168,7 +171,7 @@ public class Order {
 
     public static List<Order> listOrders(LocalDate date) throws FileException {
         List<Order> orders = new ArrayList<>();
-        String filePath = "E:\\Study\\order-management-system\\Data\\order.txt";
+        String filePath = fileName;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
