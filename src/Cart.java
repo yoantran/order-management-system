@@ -33,12 +33,41 @@ public class Cart {
         totalAmount += price * amount;
     }
 
-    public void deleteProduct(Product product) {
-        products.remove(product);
+    public void deleteProductById(String productId) {
+        String[] productToRemove = null;
+        for (Map.Entry<String[], Integer> entry : products.entrySet()) {
+            String[] productInfo = entry.getKey();
+            if (productInfo[0].equals(productId)) {
+                productToRemove = productInfo;
+                break;
+            }
+        }
+        if (productToRemove != null) {
+            int amount = products.get(productToRemove);
+            totalAmount -= amount * Double.parseDouble(productToRemove[2]);
+            products.remove(productToRemove);
+        }
+    }
+
+    public void deleteProductByName(String productName) {
+        String[] productToRemove = null;
+        for (Map.Entry<String[], Integer> entry : products.entrySet()) {
+            String[] productInfo = entry.getKey();
+            if (productInfo[1].equals(productName)) {
+                productToRemove = productInfo;
+                break;
+            }
+        }
+        if (productToRemove != null) {
+            int amount = products.get(productToRemove);
+            totalAmount -= amount * Double.parseDouble(productToRemove[2]);
+            products.remove(productToRemove);
+        }
     }
 
     public void reset() {
         products.clear();
+        totalAmount = 0;
     }
 
 

@@ -266,6 +266,7 @@ public class Main {
                                 System.out.printf("There is no product with id %s.\n", productIdFinding);
                             } else {
                                 System.out.printf("The product with id %s is:\n %s\n", productIdFinding, productRemoveResult);
+                                cart.deleteProductById(productIdFinding);
                             }
                         } else if (choiceInfo.equals("2")) {
                             System.out.println("Please input the product name:");
@@ -275,12 +276,13 @@ public class Main {
                                 System.out.printf("There is no product with the name %s\n", productNameFinding);
                             } else {
                                 System.out.printf("The product with the name %s is:\n %s\n", productNameFinding, productRemoveResult);
+                                cart.deleteProductByName(productNameFinding);
+
                             }
                         } else {
                             break;
                         }
 
-                        cart.deleteProduct(productRemoveResult);
                         System.out.println("Product removed from cart!");
                         System.out.println("Your current cart is:");
                         System.out.println(cart);
