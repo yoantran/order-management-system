@@ -17,18 +17,16 @@ class Customer extends Account {
     private String email;
     private String membership;
 
-    private static final String  fileName = ".\\Data\\account.txt";
+    private static final String fileName = ".\\Data\\account.txt";
 
 
-
-
-    public Customer(String id, String username, String password, String fullName, String phoneNumber, String email, String address) throws FileNotFoundException, NoSuchAlgorithmException {
+    public Customer(String id, String username, String password, String fullName, String phoneNumber, String email, String address) {
         super(id, username, password);
         setFullName(fullName);
         setPhoneNumber(phoneNumber);
         setAddress(address);
         setEmail(email);
-        setMembershipRegular();
+        this.membership = "Regular";
 
     }
 
@@ -42,8 +40,7 @@ class Customer extends Account {
     }
 
 
-
-    public static void registerAccount(String filename) throws IOException, NoSuchAlgorithmException {
+    public static void registerAccount(String filename) throws IOException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter a username:");
         String username = scanner.nextLine();
@@ -85,7 +82,7 @@ class Customer extends Account {
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             String line;
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 String[] data = line.split(","); // split line by comma delimiter
 
                 if (username.equals(data[1])) {
@@ -95,8 +92,6 @@ class Customer extends Account {
             }
             br.close(); // close the BufferedReader object
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -141,11 +136,31 @@ class Customer extends Account {
 
     }
 
+    public void setMembership(String membership) throws IOException {
+        this.membership = membership;
+        Path path = Paths.get(fileName);
+        List<String> lines = Files.readAllLines(path);
+
+        // Replace the customer information if it reaches the id
+        for (int i = 0; i < lines.size(); i++) {
+            String[] fields = lines.get(i).split(",");
+            if (fields[0].equals(this.getId())) {
+
+                fields[7] = membership;
+                lines.set(i, fields[0] + "," + fields[1] + "," + fields[2] + "," + fields[3] + "," + fields[4] + "," + fields[5] + "," + fields[6] + "," + fields[7]);
+                break;
+            }
+        }
+
+        // Write the modified lines back to the text file
+        Files.write(path, lines);
+    }
+
     public static Customer updatePassword(Customer customer) throws IOException {
         Scanner sc = new Scanner(System.in);
         String username = customer.getUsername();
-        System.out.printf("You are changing your passowrd for %s!\n", customer.getUsername());
-        System.out.printf("Please input your old password\n", customer.getFullName());
+        System.out.printf("You are changing your password for %s!\n", customer.getUsername());
+        System.out.print("Please input your old password\n");
         String oldPassword = sc.nextLine();
 
         Path path = Paths.get(fileName);
@@ -193,7 +208,6 @@ class Customer extends Account {
     }
 
 
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -225,21 +239,6 @@ class Customer extends Account {
         return membership;
     }
 
-    public void setMembershipRegular() {
-        this.membership = "Regular";
-    }
-
-    public void setMembershipSilver() {
-        this.membership = "Silver";
-    }
-
-    public void setMembershipGold() {
-        this.membership = "Gold";
-    }
-
-    public void setMembershipPlatinum() {
-        this.membership = "Platinum";
-    }
 
     public static void writeToDatabase(Customer account, String filename) {
         try {
@@ -284,18 +283,18 @@ class Customer extends Account {
         return customer;
     }
 
-    public double totalSpend() throws IOException {
+    public double getTotalSpend() throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(fileName));
         double totalSpend = 0;
 
         // Find the index of the object with the given id
-        for (int i = 0; i < lines.size(); i++) {
-            String[] fields = lines.get(i).split(",");
+        for (String line : lines) {
+            String[] fields = line.split(",");
             if (fields[1].equals(this.getId())) {
                 String[] products = fields[2].split("\\|");
                 long totalCart = 0;
-                for (int l = 0; l < products.length; l++) {
-                    String[] product = products[l].split(";");
+                for (String s : products) {
+                    String[] product = s.split(";");
                     totalCart += parseLong(product[2]) * parseLong(product[3]);
                 }
                 totalCart *= parseDouble(fields[4]);
@@ -305,7 +304,6 @@ class Customer extends Account {
 
         return totalSpend;
     }
-
 
 
     @Override

@@ -1,6 +1,5 @@
 import java.io.*;
 import java.security.NoSuchAlgorithmException;
-import java.util.Scanner;
 
 abstract class Account {
     private final String id;
@@ -9,7 +8,6 @@ abstract class Account {
 
     public Account(String id, String usernameReg, String password) {
         this.id = id;
-        Scanner sc = new Scanner(System.in);
         this.username = usernameReg;
         this.password = password;
 
@@ -36,17 +34,13 @@ abstract class Account {
 
     public abstract boolean isAdmin();
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getPassword() {
         return password;
     }
 
 
 
-   public static Account login(String file, String username, String password) throws IOException, NoSuchAlgorithmException {
+   public static Account login(String file, String username, String password) throws IOException {
         Account account = null;
 
 //        Check if admin
@@ -71,7 +65,7 @@ abstract class Account {
                 }
             }
             if (account == null) {
-                System.out.printf("Invalid username or password.\n");
+                System.out.print("Invalid username or password.\n");
             }
             br.close(); // close the BufferedReader object
         } catch (IOException e) {

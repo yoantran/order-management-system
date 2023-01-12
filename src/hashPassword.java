@@ -23,6 +23,7 @@ public class hashPassword {
         }
         return generatedPassword;
     }
+
     public static String getSalt() throws NoSuchAlgorithmException {
         SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
         byte[] salt = new byte[16];

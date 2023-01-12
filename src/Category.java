@@ -20,11 +20,11 @@ public class Category {
         this.categoryName = categoryName;
     }
 
-    private static final String  fileName = ".\\Data\\category.txt";
+    private static final String fileName = ".\\Data\\category.txt";
 
-    public static void writeCategoryToDatabase(Category category, String filename) {
+    public static void writeCategoryToDatabase(Category category, String fileName) {
         try {
-            FileWriter fw = new FileWriter(filename, true);
+            FileWriter fw = new FileWriter(fileName, true);
             BufferedWriter bw = new BufferedWriter(fw);
             bw.append(category.getId() + "," + category.getCategoryName());
 
@@ -39,7 +39,7 @@ public class Category {
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             String line;
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 String[] data = line.split(","); // split line by comma delimiter
 
                 if (category.equals(data[1])) {
@@ -48,8 +48,6 @@ public class Category {
             }
             br.close(); // close the BufferedReader object
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -57,7 +55,7 @@ public class Category {
     }
 
 
-    public static void addCategory (String fileName) throws IOException {
+    public static void addCategory(String fileName) throws IOException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please input the category's name");
         String categoryName = scanner.nextLine();
@@ -87,17 +85,16 @@ public class Category {
 
         if (!ifCategoryExisted(category)) {
             System.out.println("The category you input does not exist in the system. Would you like to add new category (1) or re-input the category (2)? 1/2");
-            int productCase = scanner.nextInt();
+            String productCase = scanner.nextLine();
             scanner.nextLine();
             do {
-                if (productCase != 1 && productCase != 2) {
+                if (!(productCase.equals("1")) && !(productCase.equals("2"))) {
                     System.out.println("Please input 1 or 2 only! (1) to add new category and (2) to re-input the category!");
-                    productCase = scanner.nextInt();
-                    scanner.nextLine();
+                    productCase = scanner.nextLine();
                 } else
                     break;
             } while (true);
-            if (productCase == 1) {
+            if (productCase.equals("1")) {
                 Category categoryAdd = new Category(category);
                 Category.writeCategoryToDatabase(categoryAdd, fileName);
                 System.out.println("New category added!");
@@ -123,15 +120,7 @@ public class Category {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public static void removeCategoryById (String id) throws IOException {
-        Method.removeById(id, fileName);
-    }
-
-    public static void removeCategoryByName (String name) throws IOException {
+    public static void removeCategoryByName(String name) throws IOException {
         Method.removeByName(name, fileName);
         replaceCategory(name, "None");
     }

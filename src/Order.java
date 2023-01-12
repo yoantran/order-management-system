@@ -15,7 +15,7 @@ public class Order {
     private final double discount;
     private String status;
 
-    private static final String  fileName = ".\\Data\\order.txt";
+    private static final String fileName = ".\\Data\\order.txt";
 
 
     public Order(String customer, Cart cart, double discount) throws IOException {
@@ -74,7 +74,6 @@ public class Order {
     public static Order findOrderById(String id, Customer customerRequest) throws IOException {
 
 
-
         // Read the order data from the text file
         List<String> lines = Files.readAllLines(Paths.get(fileName));
 
@@ -88,8 +87,8 @@ public class Order {
                 Cart cart = new Cart();
                 // Find the cart and customer objects
                 String[] products = fields[2].split("\\|");
-                for (int l = 0; l < products.length; l++) {
-                    String[] product = products[l].split(";");
+                for (String s : products) {
+                    String[] product = s.split(";");
                     cart.addProduct(product[0], Integer.parseInt(product[3]), Integer.parseInt(product[2]), product[1]);
                 }
                 if (!customerRequest.getId().equals(fields[1])) {
@@ -123,8 +122,8 @@ public class Order {
                     Cart cart = new Cart();
                     // Find the cart and customer objects
                     String[] products = fields[2].split("\\|");
-                    for (int l = 0; l < products.length; l++) {
-                        String[] product = products[l].split(";");
+                    for (String s : products) {
+                        String[] product = s.split(";");
                         cart.addProduct(product[0], Integer.parseInt(product[3]), Integer.parseInt(product[2]), product[1]);
 
                     }
@@ -155,8 +154,8 @@ public class Order {
                 // Find the cart and customer objects
                 Cart cart = new Cart();
                 String[] products = fields[2].split("\\|");
-                for (int l = 0; l < products.length; l++) {
-                    String[] product = products[l].split(";");
+                for (String s : products) {
+                    String[] product = s.split(";");
                     cart.addProduct(product[0], Integer.parseInt(product[3]), Integer.parseInt(product[2]), product[1]);
                 }
 
@@ -171,9 +170,8 @@ public class Order {
 
     public static List<Order> listOrders(LocalDate date) throws FileException {
         List<Order> orders = new ArrayList<>();
-        String filePath = fileName;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] fields = line.split(",");
@@ -183,8 +181,8 @@ public class Order {
                 if (date.equals(orderDateTime)) {
                     Cart cart = new Cart();
                     String[] products = fields[2].split("\\|");
-                    for (int l = 0; l < products.length; l++) {
-                        String[] product = products[l].split(";");
+                    for (String s : products) {
+                        String[] product = s.split(";");
                         cart.addProduct(product[0], Integer.parseInt(product[3]), Integer.parseInt(product[2]), product[1]);
                     }
                     orders.add(new Order(fields[0], fields[1], cart, orderDateTime, Double.parseDouble(fields[4]), fields[5]));
@@ -239,9 +237,9 @@ public class Order {
         }
     }
 
-    public static void writeOrderToDatabase(Order order, String filename) {
+    public static void writeOrderToDatabase(Order order, String fileName) {
         try {
-            FileWriter fw = new FileWriter(filename, true);
+            FileWriter fw = new FileWriter(fileName, true);
             BufferedWriter bw = new BufferedWriter(fw);
             bw.append(order.getId() + "," + order.getCustomer() + "," + order.getCart().toString() + "," + order.getDateTime() + "," + order.getDiscount() + "," + order.getStatus() + "\n");
 
@@ -269,7 +267,7 @@ public class Order {
         }
     }
 
-    public double totalPrice () throws IOException {
+    public double totalPrice() throws IOException {
         return this.cart.getTotalAmount() * this.discount;
     }
 
