@@ -259,5 +259,3 @@ public class Product {
                 '}';
     }
 }
-
-

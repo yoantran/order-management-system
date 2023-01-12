@@ -114,6 +114,32 @@ class Admin extends Account {
         System.out.println("Number of Silver members: " + silverCount);
         System.out.println("Number of Gold members: " + goldCount);
     }
+    public static void replaceCategory(String oldCategory, String newCategory) throws IOException {
+        // Read the product data from the text file
+        Path path = Paths.get(fileName);
+        List<String> lines = Files.readAllLines(path);
+
+        // Replace the category name in each line
+        for (int i = 0; i < lines.size(); i++) {
+            String[] fields = lines.get(i).split(",");
+            if (fields[3].equals(oldCategory)) {
+                fields[3] = newCategory;
+                lines.set(i, fields[0] + "," + fields[1] + "," + fields[2] + "," + fields[3]);
+            }
+        }
+
+        // Write the modified lines back to the text file
+        Files.write(path, lines);
+    }
+
+    //        Check if admin
+    BufferedReader reader = new BufferedReader(new FileReader(".\\Data\\admin.txt"));
+    String[] adminAccount = reader.readLine().split(",");
+       if (username.equals(adminAccount[1]) && password.equals(adminAccount[2])) {
+        account = new Admin(adminAccount[0], adminAccount[1],adminAccount[2]);
+        return account;
+    }
+       reader.close();
 
     @Override
     public boolean isAdmin() {
