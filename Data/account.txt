@@ -1,1 +1,2 @@
 C1,minh,123,minh,0387207548,minhnguyen@gmail.com,Quan 7 HCM,Regular
+C2,doanh,mikeee,doanh,0903667337,hong.doanh1204@gmail.com,on the street,Regular
