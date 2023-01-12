@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 
 public class Main {
-    public static void main(String[] args) throws IOException, NoSuchAlgorithmException{
+    public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
 
         Scanner scanner = new Scanner(System.in);
         String fileAccount = ".\\Data\\account.txt";
@@ -33,11 +33,9 @@ public class Main {
                     isSystem = false;
                     System.out.println("Thank you and Goodbye!");
                     break;
-                }
-                else if (option == 1) {
+                } else if (option == 1) {
                     Customer.registerAccount(fileAccount);
-                }
-                else if (option == 2) {
+                } else if (option == 2) {
                     System.out.println("Enter your username and password:");
                     String username = scanner.next();
                     String password = scanner.next();
@@ -325,7 +323,7 @@ public class Main {
                                     currentDiscount -= 0.15;
                                     break;
                             }
-                            Order order = new Order (currentCustomer.getId(), cart, currentDiscount);
+                            Order order = new Order(currentCustomer.getId(), cart, currentDiscount);
                             Order.writeOrderToDatabase(order, fileOrder);
                             System.out.printf("Your order are placed. The order detail is: %s\n", order.toString());
                             double newTotalSpend = currentCustomer.totalSpend();
@@ -362,7 +360,8 @@ public class Main {
                         System.out.println("All orders has been made by you is:");
                         List<Order> orders = null;
                         try {
-                            orders = Order.listOrders(currentCustomer.getId(), fileOrder);;
+                            orders = Order.listOrders(currentCustomer.getId(), fileOrder);
+                            ;
                         } catch (FileException e) {
                             System.out.println(e.getMessage());
                         }
@@ -553,17 +552,17 @@ public class Main {
                                 System.out.printf("You have choose product id %s, name %s with the price %s. Please input the new price\n", productNew.getId(), productNew.getProductName(), productNew.getPrice());
                                 int newPrice = scanner.nextInt();
                                 scanner.nextLine();
-                                Product.changePriceById(productIdRequest,newPrice);
-                                System.out.printf("Product with id %s is has change the price from %s to %s!\n", productIdRequest, productNew.getPrice(),newPrice);
+                                Product.changePriceById(productIdRequest, newPrice);
+                                System.out.printf("Product with id %s is has change the price from %s to %s!\n", productIdRequest, productNew.getPrice(), newPrice);
                             } else if (changeChoice.equals("2")) {
                                 System.out.println("Please input the name of the product");
                                 String productNameRequest = scanner.nextLine();
                                 productNew = Product.findProductById(productNameRequest);
-                                System.out.printf("You have choose product name %s, id %s with the price %s. Please input the new price\n",productNew.getProductName() , productNew.getId(), productNew.getPrice());
+                                System.out.printf("You have choose product name %s, id %s with the price %s. Please input the new price\n", productNew.getProductName(), productNew.getId(), productNew.getPrice());
                                 int newPrice = scanner.nextInt();
                                 scanner.nextLine();
-                                Product.changePriceByName(productNameRequest,newPrice);
-                                System.out.printf("Product with name %s is has change the price from %s to %s!\n", productNameRequest, productNew.getPrice(),newPrice);
+                                Product.changePriceByName(productNameRequest, newPrice);
+                                System.out.printf("Product with name %s is has change the price from %s to %s!\n", productNameRequest, productNew.getPrice(), newPrice);
                             } else {
                                 break;
                             }
@@ -616,17 +615,17 @@ public class Main {
                             System.out.printf("You have choose product id %s, name %s with the price %s. Please input the new price\n", productNew.getId(), productNew.getProductName(), productNew.getPrice());
                             int newPrice = scanner.nextInt();
                             scanner.nextLine();
-                            Product.changePriceById(productIdRequest,newPrice);
-                            System.out.printf("Product with id %s is has change the price from %s to %s!\n", productIdRequest, productNew.getPrice(),newPrice);
+                            Product.changePriceById(productIdRequest, newPrice);
+                            System.out.printf("Product with id %s is has change the price from %s to %s!\n", productIdRequest, productNew.getPrice(), newPrice);
                         } else if (changeChoice.equals("2")) {
                             System.out.println("Please input the name of the product");
                             String productNameRequest = scanner.nextLine();
                             productNew = Product.findProductById(productNameRequest);
-                            System.out.printf("You have choose product name %s, id %s with the price %s. Please input the new price\n",productNew.getProductName() , productNew.getId(), productNew.getPrice());
+                            System.out.printf("You have choose product name %s, id %s with the price %s. Please input the new price\n", productNew.getProductName(), productNew.getId(), productNew.getPrice());
                             int newPrice = scanner.nextInt();
                             scanner.nextLine();
-                            Product.changePriceByName(productNameRequest,newPrice);
-                            System.out.printf("Product with name %s is has change the price from %s to %s!\n", productNameRequest, productNew.getPrice(),newPrice);
+                            Product.changePriceByName(productNameRequest, newPrice);
+                            System.out.printf("Product with name %s is has change the price from %s to %s!\n", productNameRequest, productNew.getPrice(), newPrice);
                         } else {
                             break;
                         }
@@ -734,7 +733,7 @@ public class Main {
                             try {
                                 orders = Order.listOrders(date);  // Get the list of orders for the specified date
                                 double totalRevenue = Admin.calculateTotalRevenue(orders);
-                                System.out.printf("The store total revenue on %s/%s/%s is %.2f\n",dateCheckDay, dateCheckMonth, dateCheckYear, totalRevenue);
+                                System.out.printf("The store total revenue on %s/%s/%s is %.2f\n", dateCheckDay, dateCheckMonth, dateCheckYear, totalRevenue);
                             } catch (FileException e) {
                                 System.out.println("Error: " + e.getMessage());
                                 return;
@@ -786,7 +785,6 @@ public class Main {
                         System.out.println("Coming back to main screen... ");
                         break;
 
-
                     case 12:
                         System.out.println("List of all categories is presents as \"ID - Name\"");
                         List<Category> categories = Category.listCategories();
@@ -817,7 +815,6 @@ public class Main {
                             isLoggedAdmin = false;
                             System.out.println("You have logged out!");
                             currentAccount = null;
-
                         } else {
                             System.out.println("Press enter to come back to main screen");
                             scanner.nextLine();
