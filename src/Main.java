@@ -10,11 +10,11 @@ public class Main {
         System.out.printf("COSC2081 GROUP ASSIGNMENT\n" +
                         "STORE ORDER MANAGEMENT SYSTEM\n" +
                         "Instructor: Mr. Tom Huynh & Dr. Phong Ngo\n" +
-                        "Group: Group Name\n" +
+                        "Group: Group HTML\n" +
                         "s3932112, Nguyen Nhat Minh\n" +
-                        "sXXXXXXX, Luu Quoc Nhat\n" +
-                        "sXXXXXXX, Tran Ngoc Hong Doanh\n" +
-                        "sXXXXXXX, To Gia Hy\n");
+                        "s3924942, Luu Quoc Nhat\n" +
+                        "s3927023, Tran Ngoc Hong Doanh\n" +
+                        "s3927539, To Gia Hy\n");
 
         Scanner scanner = new Scanner(System.in);
         String fileAccount = ".\\Data\\account.txt";

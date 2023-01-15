@@ -2,3 +2,6 @@ G1,Electronics
 G2,Laptop
 G4,Household
 G5,Books
+G6,Office
+G7,Clothes
+G8,Crab

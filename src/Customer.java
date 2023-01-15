@@ -181,6 +181,7 @@ class Customer extends Account {
                     if (newPassword.equals(newRePassword)) {
                         fields[2] = hashPassword.get_SHA_256_SecurePassword(newPassword, salt);
                         lines.set(i, fields[0] + "|" + fields[1] + "|" + fields[2] + "|" + fields[3] + "|" + fields[4] + "|" + fields[5] + "|" + fields[6] + "|" + fields[7] + "|" + fields[8]);
+                        System.out.println("Password changed successfully!");
                         break;
                     } else {
                         System.out.println("The two password must match in order to change it!");
@@ -193,7 +194,6 @@ class Customer extends Account {
         }
         // Write the modified lines back to the text file
         Files.write(path, lines);
-        System.out.println("Password changed successfully!");
         return customer;
 
     }
