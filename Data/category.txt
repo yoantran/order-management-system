@@ -1,1 +1,4 @@
-G1,ElectronicsG2,Laptop
+G1,Electronics
+G2,Laptop
+G4,Household
+G5,Books

@@ -7,6 +7,14 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
+        System.out.printf("COSC2081 GROUP ASSIGNMENT\n" +
+                        "STORE ORDER MANAGEMENT SYSTEM\n" +
+                        "Instructor: Mr. Tom Huynh & Dr. Phong Ngo\n" +
+                        "Group: Group Name\n" +
+                        "s3932112, Nguyen Nhat Minh\n" +
+                        "sXXXXXXX, Luu Quoc Nhat\n" +
+                        "sXXXXXXX, Tran Ngoc Hong Doanh\n" +
+                        "sXXXXXXX, To Gia Hy\n");
 
         Scanner scanner = new Scanner(System.in);
         String fileAccount = ".\\Data\\account.txt";
@@ -39,17 +47,19 @@ public class Main {
                     Customer.registerAccount(fileAccount);
                 } else if (option == 2) {
                     System.out.println("Enter your username and password:");
-                    String username = scanner.next();
-                    String password = scanner.next();
+                    String username = scanner.nextLine();
+                    String password = scanner.nextLine();
                     currentAccount = Account.login(fileAccount, username, password);
                     if (currentAccount != null) {
                         if (currentAccount.isAdmin()) {
                             System.out.println("Admin logged in, welcome to Order Management System");
+                            System.out.println("Please press Enter to access to main menu!");
                             isLoggedAdmin = true;
                         } else if (!currentAccount.isAdmin()) {
                             currentCustomer = (Customer) currentAccount;
 
                             System.out.printf("Logged in, welcome %s to Order Management System\n", currentCustomer.getUsername());
+                            System.out.println("Please press Enter to access to main menu!");
                             isLogged = true;
                         }
                         scanner.nextLine();
@@ -84,7 +94,7 @@ public class Main {
                         System.out.print("Do you want to change your personal information (including name, phone number, email and your address) or you want to change your password? \nSelect (1) to change your information and (2) for password. \nIf you not wish to change anything ,please press (3).\n");
                         choiceInfo = scanner.nextLine();
                         if (choiceInfo.equals("1")) {
-                            Customer.updateCustomerInformation((Customer) currentAccount);
+                            ((Customer) currentAccount).updateCustomerInformation();
                         } else if (choiceInfo.equals("2")) {
                             Customer.updatePassword((Customer) currentAccount);
                         }
@@ -134,7 +144,7 @@ public class Main {
                                 String categoryListingName = scanner.nextLine();
                                 System.out.println("Please input the pricing order: asc/des");
                                 String listingOrder = scanner.nextLine();
-                                products = Product.listProductsByCategory(categoryListingName, listingOrder, fileProduct);
+                                products = Product.listProducts(categoryListingName, listingOrder, fileProduct);
                                 break;
                             }
                             case "3": {
@@ -146,7 +156,7 @@ public class Main {
                                 System.out.println("Please input the max price:");
                                 String maxListingPriceInput = scanner.nextLine();
                                 int maxListingPrice = Method.validateNumber(maxListingPriceInput);
-                                products = Product.listProductsInPriceRangeAndCategory(minListingPrice, maxListingPrice, categoryListingName);
+                                products = Product.listProducts(minListingPrice, maxListingPrice, categoryListingName);
                                 break;
                             }
                             default:
@@ -451,12 +461,12 @@ public class Main {
                         if (choiceInfo.equals("1")) {
                             System.out.println("Please input the id of the customer");
                             String customerIdRemoveRequest = scanner.nextLine();
-                            Method.removeById(customerIdRemoveRequest, fileAccount);
+                            Method.removeById(customerIdRemoveRequest, fileAccount, "\\|");
                             System.out.printf("Account of the customer with id %s is removed successfully!\n", customerIdRemoveRequest);
                         } else if (choiceInfo.equals("2")) {
                             System.out.println("Please input the username of the customer");
                             String customerNameRemoveRequest = scanner.nextLine();
-                            Method.removeByName(customerNameRemoveRequest, fileAccount);
+                            Method.removeByName(customerNameRemoveRequest, fileAccount, "\\|");
                             System.out.printf("Account of the customer with username %s is removed successfully!\n", customerNameRemoveRequest);
                         } else {
                             break;
@@ -497,7 +507,7 @@ public class Main {
                                 String categoryListingName = scanner.nextLine();
                                 System.out.println("Please input the pricing order: asc/des");
                                 String listingOrder = scanner.nextLine();
-                                products = Product.listProductsByCategory(categoryListingName, listingOrder, fileCategory);
+                                products = Product.listProducts(categoryListingName, listingOrder, fileCategory);
                                 break;
                             }
                             case "3": {
@@ -509,7 +519,7 @@ public class Main {
                                 System.out.println("Please input the max price:");
                                 String maxListingPriceInput = scanner.nextLine();
                                 int maxListingPrice = Method.validateNumber(maxListingPriceInput);
-                                products = Product.listProductsInPriceRangeAndCategory(minListingPrice, maxListingPrice, categoryListingName);
+                                products = Product.listProducts(minListingPrice, maxListingPrice, categoryListingName);
                                 break;
                             }
                             default:
@@ -550,12 +560,12 @@ public class Main {
                                 if (removeChoice.equals("1")) {
                                     System.out.println("Please input the id of the product");
                                     String productIdRequest = scanner.nextLine();
-                                    Method.removeById(productIdRequest, fileProduct);
+                                    Method.removeById(productIdRequest, fileProduct, ",");
                                     System.out.printf("Product with id %s is removed!\n", productIdRequest);
                                 } else if (removeChoice.equals("2")) {
                                     System.out.println("Please input the name of the product");
                                     String productNameRequest = scanner.nextLine();
-                                    Method.removeByName(productNameRequest, fileProduct);
+                                    Method.removeByName(productNameRequest, fileProduct,",");
                                     System.out.printf("Product with id %s is removed!\n", productNameRequest);
                                 } else {
                                     break label1;
@@ -619,12 +629,12 @@ public class Main {
                         if (removeChoice.equals("1")) {
                             System.out.println("Please input the id of the product");
                             String productIdRequest = scanner.nextLine();
-                            Method.removeById(productIdRequest, fileProduct);
+                            Method.removeById(productIdRequest, fileProduct, ",");
                             System.out.printf("Product with id %s is removed!", productIdRequest);
                         } else if (removeChoice.equals("2")) {
                             System.out.println("Please input the name of the product");
                             String productNameRequest = scanner.nextLine();
-                            Method.removeByName(productNameRequest, fileProduct);
+                            Method.removeByName(productNameRequest, fileProduct,",");
                             System.out.printf("Product with id %s is removed!", productNameRequest);
                         } else {
                             break;
@@ -852,7 +862,7 @@ public class Main {
                     case 14:
                         System.out.println("Please input the name of the category");
                         String categoryNameRequest = scanner.nextLine();
-                        Category.removeCategoryByName(categoryNameRequest);
+                        Category.removeCategory(categoryNameRequest);
                         System.out.printf("The category %s has been removed. All products with category %s are no longer belong to a category!\n", categoryNameRequest, categoryNameRequest);
                         System.out.println("Press enter to come back to main screen");
                         System.out.println("Coming back to main screen... ");

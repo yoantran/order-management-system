@@ -5,18 +5,20 @@ abstract class Account {
     private final String id;
     private final String username;
     private String password;
+    private String salt;
 
-    public Account(String id, String usernameReg, String password) {
+    public Account(String id, String usernameReg, String password) throws NoSuchAlgorithmException {
         this.id = id;
         this.username = usernameReg;
-        this.password = password;
-
+        this.salt = hashPassword.getSalt();
+        this.password = hashPassword.get_SHA_256_SecurePassword(password, this.salt);
     }
 
-    public Account(String id, String username) {
+    public Account(String id, String usernameReg, String password, String salt) throws NoSuchAlgorithmException {
         this.id = id;
-
-        this.username = username;
+        this.username = usernameReg;
+        this.salt = salt;
+        this.password = hashPassword.get_SHA_256_SecurePassword(password, this.salt);
     }
 
     public String getId() {
@@ -28,8 +30,15 @@ abstract class Account {
         return username;
     }
 
+    public String getSalt() {return this.salt;}
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
     public boolean checkPassword(String password) {
-        return this.password.equals(password);
+        String hashedPassword = hashPassword.get_SHA_256_SecurePassword(password, this.salt);
+        return this.password.equals(hashedPassword);
     }
 
     public abstract boolean isAdmin();
@@ -40,12 +49,12 @@ abstract class Account {
 
 
 
-   public static Account login(String file, String username, String password) throws IOException {
+   public static Account login(String fileName, String username, String password) throws IOException, NoSuchAlgorithmException {
         Account account = null;
 
 //        Check if admin
        BufferedReader reader = new BufferedReader(new FileReader(".\\Data\\admin.txt"));
-       String[] adminAccount = reader.readLine().split(",");
+       String[] adminAccount = reader.readLine().split("\\|");
        if (username.equals(adminAccount[1]) && password.equals(adminAccount[2])) {
            account = new Admin(adminAccount[0], adminAccount[1],adminAccount[2]);
            return account;
@@ -54,13 +63,14 @@ abstract class Account {
 
 //       Check if user
         try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
             String line;
             while((line = br.readLine()) != null) {
-                String[] data = line.split(","); // split line by comma delimiter
-
-                if (username.equals(data[1]) && (password.equals(data[2]))) {
-                    account = new Customer(data[0], data[1], data[2], data[3], data[4],data[5],data[6],data[7]);
+                String[] data = line.split("\\|"); // split line by comma delimiter
+                String salt = data[8];
+                String hashedPasswordX = hashPassword.get_SHA_256_SecurePassword(password, salt);
+                if (username.equals(data[1]) && (hashedPasswordX.equals(data[2]))) {
+                    account = new Customer(data[0], data[1], data[2], data[3], data[4],data[5],data[6],data[7], data[8]);
                     return account;
                 }
             }

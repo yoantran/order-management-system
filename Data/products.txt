@@ -1,1 +1,2 @@
 P1,Ipad,12000,Electronics
+P3,Paper,1000,None

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 class Admin extends Account {
-    public Admin(String id, String username, String password) {
+    public Admin(String id, String username, String password) throws NoSuchAlgorithmException {
         super(id, username, password);
     }
 
@@ -89,6 +89,7 @@ class Admin extends Account {
         System.out.printf("The biggest spender of the shop is %s, id %s, with the total order of %.2f\n", biggestSpender.getUsername(), biggestSpender.getId(), highestTotal);
 
     }
+
 
     public static void countMembership(List<Customer> customers) {
         int regularCount = 0;

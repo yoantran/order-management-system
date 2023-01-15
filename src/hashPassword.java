@@ -30,5 +30,10 @@ public class hashPassword {
         sr.nextBytes(salt);
         return salt.toString();
     }
+
+    public static void main(String[] args) {
+        System.out.println(get_SHA_256_SecurePassword("123", "[B@6615435c"));
+    }
+
 }
 
