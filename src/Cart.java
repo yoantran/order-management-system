@@ -1,4 +1,21 @@
-//https://www.quora.com/How-do-I-add-a-key-value-pair-in-ArrayList-in-Java
+/*
+  RMIT University Vietnam
+  Course: COSC2081 Programming 1
+  Semester: 2022C
+  Assessment: Assignment 3
+  Authors:
+  Nguyen Nhat Minh
+  Luu Quoc Nhat
+  Tran Ngoc Hong Doanh
+  To Gia Hy
+  ID:
+  S3932112
+  S3924942
+  s3927023
+  S3927539
+  Acknowledgement:
+  https://www.quora.com/How-do-I-add-a-key-value-pair-in-ArrayList-in-Java
+*/
 
 
 import java.util.HashMap;

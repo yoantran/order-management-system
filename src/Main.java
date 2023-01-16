@@ -1,3 +1,21 @@
+/*
+  RMIT University Vietnam
+  Course: COSC2081 Programming 1
+  Semester: 2022C
+  Assessment: Assignment 3
+  Authors:
+  Nguyen Nhat Minh
+  Luu Quoc Nhat
+  Tran Ngoc Hong Doanh
+  To Gia Hy
+  ID:
+  S3932112
+  S3924942
+  s3927023
+  S3927539
+  Acknowledgement: None
+*/
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
@@ -8,13 +26,13 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
         System.out.printf("COSC2081 GROUP ASSIGNMENT\n" +
-                        "STORE ORDER MANAGEMENT SYSTEM\n" +
-                        "Instructor: Mr. Tom Huynh & Dr. Phong Ngo\n" +
-                        "Group: Group HTML\n" +
-                        "s3932112, Nguyen Nhat Minh\n" +
-                        "s3924942, Luu Quoc Nhat\n" +
-                        "s3927023, Tran Ngoc Hong Doanh\n" +
-                        "s3927539, To Gia Hy\n");
+                "STORE ORDER MANAGEMENT SYSTEM\n" +
+                "Instructor: Mr. Tom Huynh & Dr. Phong Ngo\n" +
+                "Group: Group HTML\n" +
+                "s3932112, Nguyen Nhat Minh\n" +
+                "s3924942, Luu Quoc Nhat\n" +
+                "s3927023, Tran Ngoc Hong Doanh\n" +
+                "s3927539, To Gia Hy\n");
 
         Scanner scanner = new Scanner(System.in);
         String fileAccount = ".\\Data\\account.txt";
@@ -565,7 +583,7 @@ public class Main {
                                 } else if (removeChoice.equals("2")) {
                                     System.out.println("Please input the name of the product");
                                     String productNameRequest = scanner.nextLine();
-                                    Method.removeByName(productNameRequest, fileProduct,",");
+                                    Method.removeByName(productNameRequest, fileProduct, ",");
                                     System.out.printf("Product with id %s is removed!\n", productNameRequest);
                                 } else {
                                     break label1;
@@ -634,7 +652,7 @@ public class Main {
                         } else if (removeChoice.equals("2")) {
                             System.out.println("Please input the name of the product");
                             String productNameRequest = scanner.nextLine();
-                            Method.removeByName(productNameRequest, fileProduct,",");
+                            Method.removeByName(productNameRequest, fileProduct, ",");
                             System.out.printf("Product with id %s is removed!", productNameRequest);
                         } else {
                             break;
