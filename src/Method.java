@@ -15,7 +15,7 @@
   S3927539
   Acknowledgement:
   - Regular Expression for Phone Validation: https://itforusblog.wordpress.com/2020/05/28/regex-so-dien-thoai-viet-nam/?fbclid=IwAR00STceAqCrdFEZ1A7wF0UuA3n_aS8nukF3pp3uaCk1PXFtJWjYqLNTKy0
- - Regular Expression for Phone Validation: https://howtodoinjava.com/java/regex/java-regex-validate-email-address/
+ - Regular Expression for Email Validation: https://howtodoinjava.com/java/regex/java-regex-validate-email-address/
 */
 
 import java.io.*;
