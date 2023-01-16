@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 class Admin extends Account {
-    public Admin(String id, String username, String password) {
+    public Admin(String id, String username, String password) throws NoSuchAlgorithmException {
         super(id, username, password);
     }
 
@@ -18,15 +18,14 @@ class Admin extends Account {
         return totalRevenue;
     }
 
-    public static Map<String[], Integer> countTotalProducts(List<Order> orders) {
-        Map<String[], Integer> productCounts = new HashMap<>();
+    public static Map<Product, Integer> countTotalProducts(List<Order> orders) {
+        Map<Product, Integer> productCounts = new HashMap<>();
         for (Order order : orders) {
             Cart cart = order.getCart();
-            Map<String [], Integer> products = cart.getProducts();
-            for (Map.Entry<String[], Integer> entry : products.entrySet()) {
-                String[] productInfo = entry.getKey();
+            Map<Product, Integer> products = cart.getProducts();
+            for (Map.Entry<Product, Integer> entry : products.entrySet()) {
+                Product product = entry.getKey();
                 int count = entry.getValue();
-                String [] product = new String [] {productInfo[0], productInfo[1], productInfo[2]};
                 // Increment the count for this product
                 int currentCount = productCounts.getOrDefault(product, 0) + count;
                 productCounts.put(product, currentCount);
@@ -36,27 +35,26 @@ class Admin extends Account {
     }
 
     public static void findMostPopularProduct(List<Order> orders) {
-        Map<String[], Integer> productCounts = countTotalProducts(orders);
+        Map<Product, Integer> productCounts = countTotalProducts(orders);
         // Find the product with the highest count
-        String[] mostPopularProduct = null;
+        Product mostPopularProduct = null;
         int highestCount = 0;
-        for (Map.Entry<String[], Integer> entry : productCounts.entrySet()) {
+        for (Map.Entry<Product, Integer> entry : productCounts.entrySet()) {
             if (entry.getValue() > highestCount) {
                 mostPopularProduct = entry.getKey();
                 highestCount = entry.getValue();
             }
         }
-
         assert mostPopularProduct != null;
-        System.out.printf("The current most popular product is %s, with id %s, is sold %s time!\n", mostPopularProduct[1],mostPopularProduct[2], highestCount);
+        System.out.printf("The current most popular product is %s, with id %s, is sold %s time!\n", mostPopularProduct.getProductName(), mostPopularProduct.getId(), highestCount);
     }
 
     public static void findLeastPopularProduct(List<Order> orders) {
-        Map<String[], Integer> productCounts = countTotalProducts(orders);
+        Map<Product, Integer> productCounts = countTotalProducts(orders);
         // Find the product with the highest count
-        String[] leastPopularProduct = null;
+        Product leastPopularProduct = null;
         int lowestCount = Integer.MAX_VALUE;
-        for (Map.Entry<String[], Integer> entry : productCounts.entrySet()) {
+        for (Map.Entry<Product, Integer> entry : productCounts.entrySet()) {
             if (entry.getValue() < lowestCount) {
                 leastPopularProduct = entry.getKey();
                 lowestCount = entry.getValue();
@@ -64,7 +62,7 @@ class Admin extends Account {
         }
 
         assert leastPopularProduct != null;
-        System.out.printf("The current least popular product is %s, with id %s, is sold %s time!\n", leastPopularProduct[1],leastPopularProduct[2], lowestCount);
+        System.out.printf("The current least popular product is %s, with id %s, is sold %s time!\n", leastPopularProduct.getProductName(), leastPopularProduct.getId(), lowestCount);
     }
 
     public static void findBiggestSpender(List<Order> orders) throws IOException, NoSuchAlgorithmException {
@@ -91,6 +89,7 @@ class Admin extends Account {
         System.out.printf("The biggest spender of the shop is %s, id %s, with the total order of %.2f\n", biggestSpender.getUsername(), biggestSpender.getId(), highestTotal);
 
     }
+
 
     public static void countMembership(List<Customer> customers) {
         int regularCount = 0;

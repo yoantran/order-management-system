@@ -1,12 +1,11 @@
 //https://www.quora.com/How-do-I-add-a-key-value-pair-in-ArrayList-in-Java
 
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Cart {
-    private Map<String [], Integer> products;
+    private Map<Product, Integer> products;
     private double totalAmount;
 
     public Cart() {
@@ -14,53 +13,53 @@ public class Cart {
         totalAmount = 0;
     }
 
-    public void addProduct(String product, int amount) throws IOException {
+    public void addProduct(Product product, int amount) {
+        int newAmount = amount;
         if (products.containsKey(product)) {
-            amount += products.get(product);
+            newAmount += products.get(product);
         }
-        Product newProduct = Product.findProductById(product);
-        String [] productInfo = new String [] {newProduct.getId(), newProduct.getProductName(), String.valueOf(newProduct.getPrice())};
-        products.put(productInfo, amount);
-        totalAmount += newProduct.getPrice() * amount;
+        products.put(product, newAmount);
+        totalAmount += product.getPrice() * amount;
     }
 
     public void addProduct(String product, int amount, int price, String productName) {
-        if (products.containsKey(product)) {
-            amount += products.get(product);
+        int newAmount = amount;
+        Product productInfo = new Product(product, productName, price);
+        if (products.containsKey(productInfo)) {
+            newAmount += products.get(product);
         }
-        String [] productInfo = new String [] {product, productName, String.valueOf(price)};
-        products.put(productInfo, amount);
+        products.put(productInfo, newAmount);
         totalAmount += price * amount;
     }
 
     public void deleteProductById(String productId) {
-        String[] productToRemove = null;
-        for (Map.Entry<String[], Integer> entry : products.entrySet()) {
-            String[] productInfo = entry.getKey();
-            if (productInfo[0].equals(productId)) {
-                productToRemove = productInfo;
+        Product productToRemove = null;
+        for (Map.Entry<Product, Integer> entry : products.entrySet()) {
+            Product product = entry.getKey();
+            if (product.getId().equals(productId)) {
+                productToRemove = product;
                 break;
             }
         }
         if (productToRemove != null) {
             int amount = products.get(productToRemove);
-            totalAmount -= amount * Double.parseDouble(productToRemove[2]);
+            totalAmount -= amount * productToRemove.getPrice();
             products.remove(productToRemove);
         }
     }
 
     public void deleteProductByName(String productName) {
-        String[] productToRemove = null;
-        for (Map.Entry<String[], Integer> entry : products.entrySet()) {
-            String[] productInfo = entry.getKey();
-            if (productInfo[1].equals(productName)) {
-                productToRemove = productInfo;
+        Product productToRemove = null;
+        for (Map.Entry<Product, Integer> entry : products.entrySet()) {
+            Product product = entry.getKey();
+            if (product.getProductName().equals(productName)) {
+                productToRemove = product;
                 break;
             }
         }
         if (productToRemove != null) {
             int amount = products.get(productToRemove);
-            totalAmount -= amount * Double.parseDouble(productToRemove[2]);
+            totalAmount -= amount * productToRemove.getPrice();
             products.remove(productToRemove);
         }
     }
@@ -71,24 +70,26 @@ public class Cart {
     }
 
 
-
-
     public double getTotalAmount() {
         return totalAmount;
     }
 
-    public Map<String[], Integer> getProducts() {
+    public Map<Product, Integer> getProducts() {
         return products;
+    }
+
+    public boolean isCartEmpty() {
+        return products.isEmpty();
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String[], Integer> entry : products.entrySet()) {
-            String[] productInfo = entry.getKey();
+        for (Map.Entry<Product, Integer> entry : products.entrySet()) {
+            Product product = entry.getKey();
             int amount = entry.getValue();
-            sb.append(productInfo[0]).append(";").append(productInfo[1]).append(";")
-                    .append(productInfo[2]).append(";").append(amount).append("|");
+            sb.append(product.getId()).append(";").append(product.getProductName()).append(";")
+                    .append(product.getPrice()).append(";").append(amount).append("|");
         }
         int length = sb.length();
         if (length > 0) {

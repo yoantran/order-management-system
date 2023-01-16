@@ -1,1 +1,3 @@
 P1,Ipad,12000,Electronics
+P2,Imac,24000,Electronics
+P3,Paper,1500,None

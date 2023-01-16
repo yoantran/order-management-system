@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
@@ -16,13 +17,13 @@ public class Product {
     private int price;
     private String category;
 
-    private static final String  fileName = ".\\Data\\products.txt";
+    private static final String fileName = ".\\Data\\products.txt";
 
 
     public Product(String productName, int price, String category) throws IOException {
-        this.id = Method.generateID("P", fileName);
+        this.id = Method.generateID("P", fileName, ",");
         this.productName = productName;
-        setPrice(price);
+        setPrice(String.valueOf(price));
         this.category = category;
     }
 
@@ -33,6 +34,11 @@ public class Product {
         this.category = category;
     }
 
+    public Product(String id, String productName, int price) {
+        this.id = id;
+        this.productName = productName;
+        this.price = price;
+    }
 
 
     public static void addProduct(String fileName) throws IOException {
@@ -42,13 +48,12 @@ public class Product {
         productName = Method.validateEmpty(productName);
 
         System.out.println("Please input the price");
-        int price = scanner.nextInt();
-        price = Method.validatePrice(price);
-        scanner.nextLine();
+        String priceInput = scanner.nextLine();
+        int price = Method.validatePrice(priceInput);
 
         System.out.println("Please input the category of the product");
         String category = scanner.nextLine();
-        category = Category.validateCategory(category,fileName);
+        category = Category.validateCategory(category, ".\\Data\\category.txt");
         Product product = new Product(productName, price, category);
         writeProductToDatabase(product, fileName);
         System.out.println("Product added successfully!");
@@ -56,14 +61,11 @@ public class Product {
     }
 
 
-    public void setPrice(int price) {
-        price = Method.validatePrice(price);
-        this.price = price;
+    public void setPrice(String priceInput) {
+        this.price = Method.validatePrice(priceInput);
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
+
 
     public String getId() {
         return id;
@@ -95,13 +97,6 @@ public class Product {
         }
     }
 
-    public static void removeProductById (String id) throws IOException {
-        Method.removeById(id, fileName);
-    }
-
-    public static void removeProductByName (String name) throws IOException {
-        Method.removeByName(name, fileName);
-    }
 
     public static List<Product> listProducts() throws IOException {
         // Read the category data from the text file
@@ -117,7 +112,7 @@ public class Product {
         return products;
     }
 
-    public static List<Product> listProductsByCategory(String category, String order, String fileName) throws IOException {
+    public static List<Product> listProducts(String category, String order, String fileName) throws IOException {
         // Read the product data from the text file
         List<String> lines = Files.readAllLines(Paths.get(fileName));
 
@@ -140,19 +135,10 @@ public class Product {
         });
 
         return products;
-
-//        List<Product> products = Product.listProductsByCategory("Category", "asc", "E:\\Study\\order-management-system\\Data\\products.txt");
-
-//        for (Product product : products) {
-//    System.out.println("ID: " + product.getId());
-//    System.out.println("Product name: " + product.getProductName());
-//    System.out.println("Price: " + product.getPrice());
-//    System.out.println("Category: " + product.getCategory());
-//}
     }
 
 
-    public static List<Product> listProductsInPriceRangeAndCategory(int minPrice, int maxPrice, String category) throws IOException {
+    public static List<Product> listProducts(int minPrice, int maxPrice, String category) throws IOException {
         // Read the product data from the text file
         List<String> lines = Files.readAllLines(Paths.get(fileName));
 
@@ -170,14 +156,6 @@ public class Product {
     }
 
 
-//        List<Product> products = Product.listProductsByPriceRange(50, 100, "E:\\Study\\order-management-system\\Data\\products.txt");
-
-    //        for (Product product : products) {
-//    System.out.println("ID: " + product.getId());
-//    System.out.println("Product name: " + product.getProductName());
-//    System.out.println("Price: " + product.getPrice());
-//    System.out.println("Category: " + product.getCategory());
-//}
     public static Product findProductById(String id) throws IOException {
         // Read the product data from the text file
         List<String> lines = Files.readAllLines(Paths.get(fileName));
@@ -258,7 +236,23 @@ public class Product {
                 ", category='" + category + '\'' +
                 '}';
     }
+
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Double.compare(product.price, price) == 0 &&
+                Objects.equals(id, product.id) &&
+                Objects.equals(productName, product.productName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, productName, price);
+    }
 }
+
 
 
 

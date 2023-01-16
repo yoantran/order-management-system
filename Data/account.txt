@@ -1,2 +1,4 @@
-C1,minh,123,minh,0387207548,minhnguyen@gmail.com,Quan 7 HCM,Regular
-C2,doanh,mikeee,doanh,0903667337,hong.doanh1204@gmail.com,on the street,Regular
+C1|minh|ee46c1afa8f518f81c133a600dfcd04eb850b889f05e0c9382352a062863606f|minh|0983320145|minh@gmail.com|HXS HCM|Platinum|[B@6615435c
+C4|Nhat|627d5b7548f280074e77c8b4fa232f94f15f87e9d9b62f2a224618b08bbd45db|Nhat Luu|0387207548|nhat@gmail.com|HCM, Nha Be|Silver|[B@4cf777e8
+C8|test|f358d0bfed229082093cc10934d449ce028889e6812066225a08682ec1db5862|test|0983320145|minh@bmail.com|Distrcit 12, Bangkok|Silver|[B@4cf777e8
+C10|customer1|f358d0bfed229082093cc10934d449ce028889e6812066225a08682ec1db5862|customer1|0983320145|minh@bmail.com|Distrcit 1, Bangkok|Silver|[B@4cf777e8

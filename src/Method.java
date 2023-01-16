@@ -10,8 +10,7 @@ import static java.lang.Integer.parseInt;
 public class Method {
 
 
-
-    public static int readList(String fileName) throws IOException {
+    public static int readList(String fileName, String splitPoint) throws IOException {
 //        Scanner fileScanner = new Scanner(new File("E:\\Study\\order-management-system\\Data\\account.txt"));
         BufferedReader reader = new BufferedReader(new FileReader(fileName));
         String line = "";
@@ -23,17 +22,17 @@ public class Method {
         if (lastLine.equals("")) {
             return 0;
         } else {
-            String id = lastLine.split(",")[0];
+            String id = lastLine.split(splitPoint)[0];
             return parseInt(id.substring(1));
         }
     }
-    public static String generateID(String id, String fileName) throws IOException {
-        int amount = readList(fileName);
+
+    public static String generateID(String id, String fileName, String splitPoint) throws IOException {
+        int amount = readList(fileName, splitPoint);
         if (amount <= 0) {
             return id + (1);
-        }
-        else {
-            amount ++;
+        } else {
+            amount++;
             return id + (amount);
         }
     }
@@ -78,30 +77,57 @@ public class Method {
         return email;
     }
 
-    public static int validatePrice (int price) {
+    public static int validatePrice(String priceInput) {
         Scanner sc = new Scanner(System.in);
-        do {
-            if (price < 0) {
-                System.out.println("The product price cannot be less than 0, please re-input the price");
-                price = sc.nextInt();
-                sc.nextLine();
-            } else {
-                break;
+        int price = 0;
+        boolean valid = false;
+        while (!valid) {
+            try {
+                price = Integer.parseInt(priceInput);
+                if (price < 0) {
+                    System.out.println("The product price cannot be less than 0, please re-input the price:");
+                } else if (price > 2000000000) {
+                    System.out.println("The product price cannot be more than 2 billions, please re-input the price:");
+                } else {
+                    valid = true;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid positive number:");
             }
-        } while (true);
+            if (!valid) priceInput = sc.nextLine();
+        }
         return price;
     }
 
+    public static int validateNumber(String string) {
+        Scanner sc = new Scanner(System.in);
+        int number = 0;
+        boolean valid = false;
+        while (!valid) {
+            try {
+                number = Integer.parseInt(string);
+                if (number < 0) {
+                    System.out.println("The product price cannot be less than 0, please re-input the price:");
+                } else {
+                    valid = true;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid positive number:");
+            }
+            if (!valid) string = sc.nextLine();
+        }
+        return number;
+    }
 
 
-    public static void removeById (String id, String fileName) throws IOException {
+    public static void removeById(String id, String fileName, String split) throws IOException {
         // Read the data from the text file
         List<String> lines = Files.readAllLines(Paths.get(fileName));
 
         // Find the index of the object with the given id
         int index = -1;
         for (int i = 0; i < lines.size(); i++) {
-            String[] fields = lines.get(i).split(",");
+            String[] fields = lines.get(i).split(split);
             if (fields[0].equals(id)) {
                 index = i;
                 break;
@@ -127,14 +153,14 @@ public class Method {
     }
 
 
-    public static void removeByName(String name, String fileName) throws IOException {
+    public static void removeByName(String name, String fileName, String split) throws IOException {
         // Read the data from the text file
         List<String> lines = Files.readAllLines(Paths.get(fileName));
 
         // Find the index of the object with the given name
         int index = -1;
         for (int i = 0; i < lines.size(); i++) {
-            String[] fields = lines.get(i).split(",");
+            String[] fields = lines.get(i).split(split);
             if (fields[1].equals(name)) {
                 index = i;
                 break;
@@ -169,13 +195,6 @@ public class Method {
             System.out.println(id + " - " + carT + " - " + customerID + " - " + date + " - " + status + " - " + order.totalPrice());
         }
     }
-
-
-
-
-
-
-
 
 
 }

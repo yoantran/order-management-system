@@ -15,25 +15,16 @@ public class Order {
     private final double discount;
     private String status;
 
-    private static final String  fileName = ".\\Data\\order.txt";
+    private static final String fileName = ".\\Data\\order.txt";
 
 
     public Order(String customer, Cart cart, double discount) throws IOException {
-        this.id = Method.generateID("O", fileName);
+        this.id = Method.generateID("O", fileName, ",");
         this.customer = customer;
         this.cart = cart;
         this.dateTime = LocalDate.now();
 
         this.status = "Pending";
-        this.discount = discount;
-    }
-
-    public Order(String id, String customer, Cart cart, String status, int discount) {
-        this.id = id;
-        this.customer = customer;
-        this.cart = cart;
-        this.dateTime = LocalDate.now();
-        this.status = status;
         this.discount = discount;
     }
 
@@ -74,7 +65,6 @@ public class Order {
     public static Order findOrderById(String id, Customer customerRequest) throws IOException {
 
 
-
         // Read the order data from the text file
         List<String> lines = Files.readAllLines(Paths.get(fileName));
 
@@ -88,8 +78,8 @@ public class Order {
                 Cart cart = new Cart();
                 // Find the cart and customer objects
                 String[] products = fields[2].split("\\|");
-                for (int l = 0; l < products.length; l++) {
-                    String[] product = products[l].split(";");
+                for (String s : products) {
+                    String[] product = s.split(";");
                     cart.addProduct(product[0], Integer.parseInt(product[3]), Integer.parseInt(product[2]), product[1]);
                 }
                 if (!customerRequest.getId().equals(fields[1])) {
@@ -104,6 +94,35 @@ public class Order {
         return null;
     }
 
+    public static List<Order> listOrders() throws FileException {
+        // Create a list to store the orders
+        List<Order> orders = new ArrayList<>();
+
+        // Read the order data from the text file using a BufferedReader
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] fields = line.split(",");
+                // Parse the date field
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate orderDateTime = LocalDate.parse(fields[3], formatter);
+
+                // Find the cart and customer objects
+                Cart cart = new Cart();
+                String[] products = fields[2].split("\\|");
+                for (String s : products) {
+                    String[] product = s.split(";");
+                    cart.addProduct(product[0], Integer.parseInt(product[3]), Integer.parseInt(product[2]), product[1]);
+                }
+
+                orders.add(new Order(fields[0], fields[1], cart, orderDateTime, Double.parseDouble(fields[4]), fields[5]));
+            }
+        } catch (IOException e) {
+            throw new FileException("An error occurred while reading the file: " + e.getMessage());
+        }
+
+        return orders;
+    }
 
     public static List<Order> listOrders(String customerId, String fileName) throws FileException {
         // Create a list to store the orders
@@ -123,8 +142,8 @@ public class Order {
                     Cart cart = new Cart();
                     // Find the cart and customer objects
                     String[] products = fields[2].split("\\|");
-                    for (int l = 0; l < products.length; l++) {
-                        String[] product = products[l].split(";");
+                    for (String s : products) {
+                        String[] product = s.split(";");
                         cart.addProduct(product[0], Integer.parseInt(product[3]), Integer.parseInt(product[2]), product[1]);
 
                     }
@@ -139,41 +158,11 @@ public class Order {
         return orders;
     }
 
-    public static List<Order> listOrders() throws FileException {
-        // Create a list to store the orders
-        List<Order> orders = new ArrayList<>();
-
-        // Read the order data from the text file using a BufferedReader
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] fields = line.split(",");
-                // Parse the date field
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                LocalDate orderDateTime = LocalDate.parse(fields[3], formatter);
-
-                // Find the cart and customer objects
-                Cart cart = new Cart();
-                String[] products = fields[2].split("\\|");
-                for (int l = 0; l < products.length; l++) {
-                    String[] product = products[l].split(";");
-                    cart.addProduct(product[0], Integer.parseInt(product[3]), Integer.parseInt(product[2]), product[1]);
-                }
-
-                orders.add(new Order(fields[0], fields[1], cart, orderDateTime, Double.parseDouble(fields[4]), fields[5]));
-            }
-        } catch (IOException e) {
-            throw new FileException("An error occurred while reading the file: " + e.getMessage());
-        }
-
-        return orders;
-    }
 
     public static List<Order> listOrders(LocalDate date) throws FileException {
         List<Order> orders = new ArrayList<>();
-        String filePath = fileName;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] fields = line.split(",");
@@ -183,8 +172,8 @@ public class Order {
                 if (date.equals(orderDateTime)) {
                     Cart cart = new Cart();
                     String[] products = fields[2].split("\\|");
-                    for (int l = 0; l < products.length; l++) {
-                        String[] product = products[l].split(";");
+                    for (String s : products) {
+                        String[] product = s.split(";");
                         cart.addProduct(product[0], Integer.parseInt(product[3]), Integer.parseInt(product[2]), product[1]);
                     }
                     orders.add(new Order(fields[0], fields[1], cart, orderDateTime, Double.parseDouble(fields[4]), fields[5]));
@@ -239,9 +228,9 @@ public class Order {
         }
     }
 
-    public static void writeOrderToDatabase(Order order, String filename) {
+    public static void writeOrderToDatabase(Order order, String fileName) {
         try {
-            FileWriter fw = new FileWriter(filename, true);
+            FileWriter fw = new FileWriter(fileName, true);
             BufferedWriter bw = new BufferedWriter(fw);
             bw.append(order.getId() + "," + order.getCustomer() + "," + order.getCart().toString() + "," + order.getDateTime() + "," + order.getDiscount() + "," + order.getStatus() + "\n");
 
@@ -269,7 +258,7 @@ public class Order {
         }
     }
 
-    public double totalPrice () throws IOException {
+    public double totalPrice() throws IOException {
         return this.cart.getTotalAmount() * this.discount;
     }
 
