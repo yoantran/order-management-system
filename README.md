@@ -11,7 +11,7 @@ Lecturer: [Tom Huynh](https://github.com/TomHuynhSG) ( tom.huynh@rmit.edu.vn )
 
 GitHub Repo : https://github.com/yoantran/order-management-system
 
-Video Demonstration Link: https://www.youtube.com/watch?v=pl3MPsES9-A
+Video Demonstration Link: https://www.youtube.com/watch?v=pl3MPsES9-A  (following the presentation slide: [here](https://www.canva.com/design/DAFXbQuMTDQ/kfmWSx5s2jT51lpiuOhrRw/view?utm_content=DAFXbQuMTDQ&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink))
 
 ### HTML group, including:
 
