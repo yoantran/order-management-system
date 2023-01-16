@@ -1,3 +1,21 @@
+/*
+  RMIT University Vietnam
+  Course: COSC2081 Programming 1
+  Semester: 2022C
+  Assessment: Assignment 3
+  Authors:
+  Nguyen Nhat Minh
+  Luu Quoc Nhat
+  Tran Ngoc Hong Doanh
+  To Gia Hy
+  ID:
+  S3932112
+  S3924942
+  s3927023
+  S3927539
+  Acknowledgement: https://howtodoinjava.com/java/java-security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/?fbclid=IwAR1HtOK_dQ_8WVLWSaB8PxfUJ_F7KJ81Je-gwEky_YL6la8hIfA4Ab_OFjM
+*/
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;

@@ -15,14 +15,15 @@ Video Demonstration Link:
 
 ### HTML group, including:
 
-| Name                 | sID      | Email                | Github                      |
-|----------------------|----------|----------------------|-----------------------------|
-| Nguyen Nhat Minh     | S3932112 | S3932112@rmit.edu.vn |                             |
-| Luu Quoc Nhat        | S3924942 | S3924942@rmit.edu.vn |                             |
-| Tran Ngoc Hong Doanh | s3927023 | s3927023@rmit.edu.vn | https://github.com/yoantran |
-| To Gia Hy            | S3927539 | S3927539@rmit.edu.vn |                             |
+| Name                 | sID      | Email                | Github                              |
+|----------------------|----------|----------------------|-------------------------------------|
+| Nguyen Nhat Minh     | S3932112 | S3932112@rmit.edu.vn | https://github.com/minhnguyen200703 |
+| Luu Quoc Nhat        | S3924942 | S3924942@rmit.edu.vn | https://github.com/nhatluu03        |
+| Tran Ngoc Hong Doanh | s3927023 | s3927023@rmit.edu.vn | https://github.com/yoantran         |
+| To Gia Hy            | S3927539 | S3927539@rmit.edu.vn | https://github.com/ToGiaHy          |
 
 ***
+
 ## Assessment Details
 
 In Australian universities, one of the best ways for students to get real coding experience is to join a
@@ -34,13 +35,15 @@ resolve an existing problem in society.
 
 Thus, the nature of this assignment 3 is to provide you a taste and experience of a 4-week tech hackathon.
 
-Assume that you are involved in a technology store that wishes to develop an order.Order Management System, which is the key
+Assume that you are involved in a technology store that wishes to develop an order.Order Management System, which is the
+key
 point of their business growth plan. This may reduce the paper and printing and distribution work which saves a lot of
 time.
 
 The main objective of the Store order.Order Management System is to allow customers order products.
 
-The detailed requirements and technical specifications for this application can be found: [here](COSC2081_Group_Project.pdf)
+The detailed requirements and technical specifications for this application can be
+found: [here](COSC2081_Group_Project.pdf)
 
 Sample database text files can be found :
 
